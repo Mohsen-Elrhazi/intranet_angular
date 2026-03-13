@@ -1,2 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+/* Cible le contenu du message Ng-Zorro */
+.ant-message-custom-content {
+  font-size: 16px !important; /* Augmente la taille de la police */
+  display: flex;
+  align-items: center;
+}
+
+/* Agrandir l'icône à côté du texte */
+.ant-message-custom-content .anticon {
+  font-size: 20px !important;
+  margin-right: 12px;
+}
