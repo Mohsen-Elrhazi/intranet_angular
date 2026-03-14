@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -11,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/models/login-request.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 export class LoginComponent {
   private fb = inject(NonNullableFormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
   private message = inject(NzMessageService);
 
   validateForm = this.fb.group({
@@ -37,8 +39,11 @@ export class LoginComponent {
     password: this.fb.control('', [Validators.required]),
   });
 
+  isLoading = signal(false);
+
   login(): void {
     if (this.validateForm.valid) {
+      this.isLoading.set(true);
       const loginData = this.validateForm.getRawValue();
 
       const request: LoginRequest = {
@@ -48,12 +53,28 @@ export class LoginComponent {
 
       this.authService.login(request).subscribe({
         next: (response) => {
-          console.log('Login successful:', response);
+          this.isLoading.set(false);
+          // console.log('Login successful:', response);
           this.message.success(response.message);
           this.authService.saveTokens(response.data.accessToken, response.data.refreshToken);
+
+          switch (this.authService.getUserRole()) {
+            case 'ADMIN':
+              this.router.navigate(['/admin/teachers']);
+              break;
+            case 'TEACHER':
+              this.router.navigate(['/teacher/courses']);
+              break;
+            case 'STUDENT':
+              this.router.navigate(['/student/courses']);
+              break;
+            default:
+              this.router.navigate(['/login']);
+          }
         },
         error: (err) => {
-          console.log('Login failed:', err);
+          this.isLoading.set(false);
+          // console.log('Login failed:', err);
           this.message.error(err.error?.message || 'Une erreur est survenue');
         },
       });
