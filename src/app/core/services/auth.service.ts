@@ -5,6 +5,8 @@ import { LoginRequest } from '../models/login-request.model';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { AuthResponse } from '../models/auth-response.model';
+import { jwtDecode } from 'jwt-decode';
+import { CustomJwtPayload } from '../models/custom-jwt-payload.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +23,13 @@ export class AuthService {
   saveTokens(accessToken: string, refreshToken: string): void {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+  }
+
+  getUserRole(): string | null {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) return null;
+
+    const decoded = jwtDecode<CustomJwtPayload>(accessToken);
+    return decoded.role;
   }
 }
