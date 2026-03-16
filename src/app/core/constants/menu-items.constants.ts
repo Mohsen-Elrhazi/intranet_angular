@@ -8,9 +8,15 @@ export interface MenuItem {
 export const MENU_ITEMS: MenuItem[] = [
   // --- ADMIN ---
   {
-    label: 'teachers',
+    label: 'Ensignants',
     icon: 'team',
-    route: '/admin/teachers',
+    route: '/admin/enseignants',
+    roles: ['ADMIN'],
+  },
+   {
+    label: 'Etudiants',
+    icon: 'team',
+    route: '/admin/etudiants',
     roles: ['ADMIN'],
   },
 

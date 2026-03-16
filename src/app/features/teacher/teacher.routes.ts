@@ -3,18 +3,18 @@ import { AssignmentsComponent } from './pages/assignments/assignments.component'
 import { CoursesComponent } from './pages/courses/courses.component';
 
 export const teacherRoutes = [
-  {
-    path: 'dashboard',
-    Component: MainLayoutComponent,
-    children: [
+  // {
+  //   path: 'dashboard',
+  //   Component: MainLayoutComponent,
+  //   children: [
       {
         path: 'courses',
-        Component: CoursesComponent,
+        component: CoursesComponent,
       },
       {
         path: 'assignments',
-        Component: AssignmentsComponent,
+        component: AssignmentsComponent,
       },
-    ],
-  },
+  //   ],
+  // },
 ];

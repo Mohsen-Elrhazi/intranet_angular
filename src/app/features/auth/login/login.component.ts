@@ -60,7 +60,7 @@ export class LoginComponent {
 
           switch (this.authService.getUserRole()) {
             case 'ADMIN':
-              this.router.navigate(['/admin/teachers']);
+              this.router.navigate(['/admin/enseignants']);
               break;
             case 'TEACHER':
               this.router.navigate(['/teacher/courses']);

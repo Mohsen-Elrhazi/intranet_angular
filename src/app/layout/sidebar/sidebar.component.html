@@ -1,1 +1,11 @@
-<p>sidebar works!</p>
+<div class="logo text-gray-800 text-center">Logo</div>
+<ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="layoutService.isCollapsed()">
+  @for (item of filteredMenu(); track item.route) {
+    <li nz-menu-item nzMatchRouter>
+      <a [routerLink]="item.route">
+        <nz-icon [nzType]="item.icon" />
+        <span class="text-md">{{ item.label }}</span>
+      </a>
+    </li>
+  }
+</ul>

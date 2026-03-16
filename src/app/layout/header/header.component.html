@@ -1,1 +1,45 @@
-<p>header works!</p>
+<div class="header-content" nzTheme="light">
+  <nz-icon
+    class="trigger"
+    [nzType]="layoutService.isCollapsed() ? 'menu-unfold' : 'menu-fold'"
+    (click)="layoutService.toggleSidebar()"
+  />
+
+  <div class="profile">
+    <a
+      nz-dropdown
+      [nzTrigger]="'click'"
+      [nzDropdownMenu]="menu"
+      class="flex items-center cursor-pointer gap-2 p-2 hover:bg-gray-50 rounded-lg transition-all"
+    >
+      <nz-avatar nzSize="large" nzIcon="user" />
+    </a>
+
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <div class="bg-white rounded-lg shadow-lg border border-gray-100 min-w-[240px]">
+        <div class="flex items-center px-4 py-3 gap-3 border-b border-gray-100">
+          <nz-avatar nzSize="large" nzIcon="user" />
+          <div class="flex flex-col flex-1 overflow-hidden">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-900 truncate text-sm">Bonnie Green</span>
+            </div>
+            <span class="text-sm text-gray-600 truncate">test@gmail.com</span>
+          </div>
+        </div>
+
+        <ul nz-menu nzSelectable class="border-none shadow-none">
+          <li nz-menu-item class="py-2">
+            <span nz-icon nzType="setting" class="mr-2"></span> Settings
+          </li>
+          <li nz-menu-item class="py-2">
+            <span nz-icon nzType="user" class="mr-2"></span> profile
+          </li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item nzDanger class="py-2" (click)="logout()">
+            <span nz-icon nzType="logout" class="mr-2"></span> Sign out
+          </li>
+        </ul>
+      </div>
+    </nz-dropdown-menu>
+  </div>
+</div>
