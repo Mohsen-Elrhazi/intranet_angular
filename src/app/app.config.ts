@@ -5,12 +5,19 @@ import { routes } from './app.routes';
 import { fr_FR, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import fr from '@angular/common/locales/fr';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authGuard } from './core/guards/auth.guard';
+import { authInterceptor } from './core/interceptor/auth.interceptor';
 
 registerLocaleData(fr);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes), provideNzI18n(fr_FR)
+    provideRouter(routes),
+     provideNzI18n(fr_FR),
+     provideHttpClient(
+      withInterceptors([authInterceptor])
+     ),
   ]
 };
