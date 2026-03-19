@@ -59,7 +59,7 @@
       </nz-layout>
     </nz-layout> -->
 
-<nz-layout class="app-layout">
+<!-- <nz-layout class="app-layout">
   <nz-sider
     nzCollapsible
     [nzCollapsed]="layoutService.isCollapsed()"
@@ -136,5 +136,39 @@
         
       </div>
     </nz-content>
+  </nz-layout>
+</nz-layout> -->
+
+
+<!-- test -->
+ <nz-layout class="app-layout">
+  <nz-sider
+    nzCollapsible
+    [nzCollapsed]="layoutService.isCollapsed()"
+    nzTheme="light"
+    [nzTrigger]="null"
+    nzWidth="200px"
+  >
+    <app-sidebar></app-sidebar>
+  </nz-sider>
+
+  <nz-layout class="right-layout">
+    
+    <nz-header nzTheme="light">
+      <app-header></app-header>
+    </nz-header>
+
+    <nz-content class="scrollable-content">
+        <!-- <div class="p-4"> <nz-breadcrumb>
+            <nz-breadcrumb-item>User</nz-breadcrumb-item>
+          <nz-breadcrumb-item>Bill</nz-breadcrumb-item>
+        </nz-breadcrumb> -->
+
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      <!-- </div> -->
+    </nz-content>
+
   </nz-layout>
 </nz-layout>
