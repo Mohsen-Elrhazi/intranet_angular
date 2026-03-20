@@ -31,6 +31,10 @@ export class DepartmentFormComponent {
   }
 
   envoyer() {
+    if (this.validateForm.get('name')?.hasError('backendError')) {
+      this.validateForm.get('name')?.setErrors(null);
+    }
+
     if (this.validateForm.invalid) {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
