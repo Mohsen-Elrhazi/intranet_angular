@@ -39,8 +39,8 @@ export class TeacherFormComponent {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      phoneNumber: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern("^[+]?[0-9 ]*$")]],
       specialization: ['', [Validators.required]],
     });
   }
@@ -59,8 +59,16 @@ export class TeacherFormComponent {
   };
 
   envoyer() {
-    if (this.validateForm.invalid) return;
-
+    if (this.validateForm.invalid) {
+      Object.values(this.validateForm.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return;
+    }
+    
     this.isLoading = true;
 
     const values: CreateTeacherRequest = this.validateForm.value;
@@ -94,7 +102,7 @@ export class TeacherFormComponent {
     });
   }
 
-  fermer() {
+  close() {
     this.modalRef.destroy();
   }
 }

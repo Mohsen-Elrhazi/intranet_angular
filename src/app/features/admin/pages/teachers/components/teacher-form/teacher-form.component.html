@@ -2,8 +2,8 @@
   <div class="px-6 py-2">
     <div class="grid grid-cols-2 gap-4">
       <nz-form-item>
-        <nz-form-label nzFor="firstName" nzRequired>Prénom</nz-form-label>
-        <nz-form-control>
+        <nz-form-label nzFor="firstName" nzRequired >Prénom</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="firstNameErrorTpl">
           <input
             type="text"
             nz-input
@@ -11,12 +11,18 @@
             id="firstName"
             placeholder="Entrez le prénom"
           />
+          <ng-template #firstNameErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Le prénom est obligatoire !
+            }
+          </ng-template>
+
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="lastName" nzRequired>Nom</nz-form-label>
-        <nz-form-control>
+        <nz-form-control nzHasFeedback [nzErrorTip]="lastNameErrorTpl">
           <input
             nz-input
             type="text"
@@ -24,6 +30,11 @@
             formControlName="lastName"
             placeholder="Entrez le nom"
           />
+          <ng-template #lastNameErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Le nom est obligatoire !
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -31,7 +42,7 @@
     <div class="grid grid-cols-2 gap-4">
       <nz-form-item>
         <nz-form-label nzFor="email" nzRequired>Email</nz-form-label>
-        <nz-form-control>
+        <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl">
           <input
             type="text"
             nz-input
@@ -39,12 +50,20 @@
             id="email"
             placeholder="Entrez l'email"
           />
+          <ng-template #emailErrorTpl let-control>
+            @if (control.hasError('required')) {
+              L'email est obligatoire !
+            }
+            @if (control.hasError('email')) {
+              Veuillez entrer une adresse email valide.
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="password" nzRequired>Mot de passe</nz-form-label>
-        <nz-form-control nzErrorTip="Mot de passe requis">
+        <nz-form-control nzHasFeedback [nzErrorTip]="passwordErrorTpl">
           <nz-input-password>
             <input
               nz-input
@@ -54,6 +73,14 @@
               placeholder="Mot de passe"
             />
           </nz-input-password>
+          <ng-template #passwordErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Le mot de passe est obligatoire !
+            }
+            @if (control.hasError('minlength')) {
+              Le mot de passe doit contenir au moins 8 caractères.
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -61,20 +88,27 @@
     <div class="grid grid-cols-2 gap-4">
       <nz-form-item>
         <nz-form-label nzFor="phone" nzRequired>Téléphone</nz-form-label>
-        <nz-form-control>
+        <nz-form-control nzHasFeedback [nzErrorTip]="phoneErrorTpl">
           <input
-            type="text"
             nz-input
             formControlName="phoneNumber"
             id="phone"
             placeholder="Entrez le numéro de téléphone"
           />
+          <ng-template #phoneErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Le numéro de téléphone est obligatoire !
+            }
+            @if (control.hasError('pattern')) {
+              Veuillez entrer un numéro de téléphone valide.
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label nzFor="specialization" nzRequired>Spécialité</nz-form-label>
-        <nz-form-control nzErrorTip="Spécialité requise">
+        <nz-form-control nzHasFeedback [nzErrorTip]="specializationErrorTpl">
           <input
             nz-input
             nzSize="default"
@@ -82,6 +116,11 @@
             id="specialization"
             placeholder="Spécialité"
           />
+          <ng-template #specializationErrorTpl let-control>
+            @if (control.hasError('required')) {
+              La spécialité est obligatoire !
+            }
+          </ng-template>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -111,65 +150,16 @@
   <div class="h-[1px] bg-gray-200"></div>
 
   <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
-    <button nz-button nzType="default" type="button" (click)="fermer()">Annuler</button>
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
 
     <button
       [nzLoading]="isLoading"
       nz-button
       nzType="primary"
       type="submit"
-      [disabled]="!validateForm.valid"
     >
       Ajouter
     </button>
   </div>
 </form>
 
-<!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
-  <div class="p-6 ">
-    
-    <div class="grid grid-cols-2 gap-4">
-      <nz-form-item>
-        <nz-form-label nzRequired>Prénom</nz-form-label>
-        <nz-form-control >
-          <input nz-input formControlName="firstName" placeholder="Ex: Ahmed" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label nzRequired>Nom</nz-form-label>
-        <nz-form-control nzErrorTip="Le nom est requis">
-          <input nz-input formControlName="lastName" placeholder="Ex: Alami" />
-        </nz-form-control>
-      </nz-form-item>
-    </div>
-
-  </div>
-
-  <div class="h-[1px] bg-gray-200"></div>
-
-  <div class="flex justify-end gap-2 p-4 bg-gray-50/50 rounded-b-lg">
-    <button nz-button nzType="default" type="button" (click)="fermer()">Annuler</button>
-    <button nz-button nzType="primary" type="submit" [disabled]="!validateForm.valid">
-      Créer l'enseignant
-    </button>
-  </div>
-</form> -->
-
-<!-- button upload -->
-<!-- <nz-form-item>
-  <nz-form-label nzFor="profileImage">Photo de profil</nz-form-label>
-  <nz-form-control>
-    <nz-upload
-      [nzLimit]="1"
-      nzListType="picture"
-      [nzBeforeUpload]="beforeUpload"
-      (nzChange)="handleChange($event)"
-    >
-      <button nz-button type="button">
-        <nz-icon nzType="upload" />
-        Choisir une photo
-      </button>
-    </nz-upload>
-  </nz-form-control>
-</nz-form-item> -->
