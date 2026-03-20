@@ -40,7 +40,7 @@ export class TeacherFormComponent {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern("^[+]?[0-9 ]*$")]],
+      phoneNumber: ['', [Validators.required, Validators.pattern('^[+]?[0-9 ]*$')]],
       specialization: ['', [Validators.required]],
     });
   }
@@ -59,6 +59,10 @@ export class TeacherFormComponent {
   };
 
   envoyer() {
+    if (this.validateForm.get('email')?.hasError('backendError')) {
+      this.validateForm.get('email')?.setErrors(null);
+    }
+
     if (this.validateForm.invalid) {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -68,7 +72,7 @@ export class TeacherFormComponent {
       });
       return;
     }
-    
+
     this.isLoading = true;
 
     const values: CreateTeacherRequest = this.validateForm.value;
@@ -89,15 +93,21 @@ export class TeacherFormComponent {
 
     this.teacherService.createTeacher(formData).subscribe({
       next: (response) => {
-        console.log('Enseignant créé avec succès :', response);
         this.isLoading = false;
         this.messageService.success(response.message);
         this.modalRef.close();
       },
       error: (err) => {
-        console.error('Erreur Backend :', err);
         this.isLoading = false;
-        this.messageService.error("Erreur lors de la création de l'enseignant");
+
+        if ((err.status === 400 || err.status === 409) && err.error?.errors?.email) {
+          const errorMessage = err.error.errors.email;
+          this.messageService.error(errorMessage);
+
+          this.validateForm.get('email')?.setErrors({ backendError: errorMessage });
+        } else {
+          this.messageService.error('Une erreur est survenue. Veuillez réessayer.');
+        }
       },
     });
   }

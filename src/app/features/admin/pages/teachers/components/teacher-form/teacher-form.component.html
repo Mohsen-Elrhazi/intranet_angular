@@ -2,7 +2,7 @@
   <div class="px-6 py-2">
     <div class="grid grid-cols-2 gap-4">
       <nz-form-item>
-        <nz-form-label nzFor="firstName" nzRequired >Prénom</nz-form-label>
+        <nz-form-label nzFor="firstName" nzRequired>Prénom</nz-form-label>
         <nz-form-control nzHasFeedback [nzErrorTip]="firstNameErrorTpl">
           <input
             type="text"
@@ -16,7 +16,6 @@
               Le prénom est obligatoire !
             }
           </ng-template>
-
         </nz-form-control>
       </nz-form-item>
 
@@ -56,6 +55,9 @@
             }
             @if (control.hasError('email')) {
               Veuillez entrer une adresse email valide.
+            }
+            @if (control.hasError('backendError')) {
+              {{ control.getError('backendError') }}
             }
           </ng-template>
         </nz-form-control>
@@ -152,14 +154,6 @@
   <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
     <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
 
-    <button
-      [nzLoading]="isLoading"
-      nz-button
-      nzType="primary"
-      type="submit"
-    >
-      Ajouter
-    </button>
+    <button [nzLoading]="isLoading" nz-button nzType="primary" type="submit">Ajouter</button>
   </div>
 </form>
-
