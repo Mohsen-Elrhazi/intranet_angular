@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -12,19 +11,20 @@ import { StudentService } from '../../services/student.service';
 
 @Component({
   selector: 'app-student-form',
-  imports: [ ReactiveFormsModule,
+  imports: [
+    ReactiveFormsModule,
     NzButtonModule,
     NzFormModule,
     NzIconModule,
     NzInputModule,
-    NzDividerModule,
-    NzUploadModule,],
+    NzUploadModule,
+  ],
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css',
 })
 export class StudentFormComponent {
   private fb = inject(FormBuilder);
-  private modalRef = inject(NzModalRef); // C'est la télécommande de la modale
+  private modalRef = inject(NzModalRef); //  télécommande de la modale
   private studentService = inject(StudentService);
   private messageService = inject(NzMessageService);
 
@@ -37,7 +37,7 @@ export class StudentFormComponent {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      phoneNumber: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required, Validators.pattern("^[+]?[0-9 ]*$")]],
       cne: ['', [Validators.required]],
     });
   }
@@ -52,11 +52,19 @@ export class StudentFormComponent {
     };
 
     reader.readAsDataURL(file as any);
-    return false; // Empêche l'envoi auto
+    return false;
   };
 
   envoyer() {
-    if (this.validateForm.invalid) return;
+    if (this.validateForm.invalid) {
+      Object.values(this.validateForm.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+      return;
+    }
 
     this.isLoading = true;
 
