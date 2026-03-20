@@ -1,6 +1,7 @@
 import { MainLayoutComponent } from '../../layout/main-layout/main-layout.component';
 import { TeachersComponent } from './pages/teachers/teachers.component';
 import { StudentsComponent } from './pages/students/students.component';
+import { DepartmentsComponent } from './pages/departments/departments.component';
 
 export const adminRoutes = [
 //   {
@@ -14,6 +15,10 @@ export const adminRoutes = [
       {
         path: 'etudiants',
         component: StudentsComponent,
+      },
+      {
+        path: 'departements',
+        component: DepartmentsComponent,
       },
     // ],
 //   },
