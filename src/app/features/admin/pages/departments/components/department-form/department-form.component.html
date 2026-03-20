@@ -1,0 +1,61 @@
+<!-- <form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
+  <div class="px-6 py-2">
+    <nz-form-item>
+      <nz-form-label nzFor="name" nzRequired>Nom</nz-form-label>
+      <nz-form-control>
+        <input
+          type="text"
+          nz-input
+          formControlName="name"
+          id="name"
+          placeholder="Entrez le prénom"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+
+  </div>
+
+  <div class="h-[1px] bg-gray-200"></div>
+
+  <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
+
+    <button [nzLoading]="isLoading" nz-button nzType="primary" type="submit">Ajouter</button>
+  </div>
+</form>
+
+ -->
+
+<form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
+  <div class="px-6 py-2">
+    <nz-form-item>
+      <nz-form-label nzRequired>Nom du département</nz-form-label>
+
+      <nz-form-control nzHasFeedback [nzErrorTip]="nameErrorTpl">
+        <input nz-input formControlName="name" placeholder="Entrez le nom" />
+
+        <ng-template #nameErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Le nom du département est obligatoire !
+          }
+          @if (control.hasError('minlength')) {
+            Le nom doit contenir au moins 3 caractères.
+          }
+          @if (control.hasError('backendError')) {
+            {{ control.getError('backendError') }}
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="h-[1px] bg-gray-200"></div>
+
+  <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
+
+    
+    <button [nzLoading]="isLoading"   [disabled]="validateForm.invalid" nz-button nzType="primary" type="submit">Ajouter</button>
+  </div>
+</form>
