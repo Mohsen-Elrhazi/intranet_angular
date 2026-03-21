@@ -1,4 +1,123 @@
-<button nz-button nzType="primary" (click)="showModal()">
-  <nz-icon nzType="plus-circle" nzTheme="outline" />
-   <span>Ajouter un enseignant</span>
-</button>
+
+<div
+  class="flex items-center justify-between gap-4 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200"
+>
+  <div class="flex items-center gap-3 flex-nowrap">
+    <!-- search -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nom ou prénom..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+    <!-- specialization -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="Specialite"
+        [(ngModel)]="specialization"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+    <!-- <nz-select
+      nzAllowClear
+      nzPlaceHolder="Spécialisation"
+      [(ngModel)]="selectedSpecialization"
+      (ngModelChange)="onSearch()"
+      class="w-48 flex-shrink-0"
+    >
+      @for (spec of specializations; track spec) {
+        <nz-option [nzLabel]="spec" [nzValue]="spec"></nz-option>
+      }
+    </nz-select> -->
+
+    <button nz-button (click)="resetFilters()">
+      <!-- <nz-icon nzType="rest" nzTheme="outline" /> -->
+       <nz-icon nzType="reload" nzTheme="outline" />
+      <span>Réinitialiser</span>
+    </button>
+  </div>
+
+  <button nz-button nzType="primary" (click)="showModal()">
+    <nz-icon nzType="plus-circle" nzTheme="outline" />
+    <span>Ajouter un enseignant</span>
+  </button>
+</div>
+
+<!--  -->
+<div class="shadow-sm border border-gray-100 rounded-lg overflow-hidden">
+  <nz-table
+    #teacherTable
+    [nzData]="teachers()"
+    [nzFrontPagination]="false"
+    [nzTotal]="totalElements()"
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzLoading]="loading()"
+    (nzPageIndexChange)="onPageIndexChange($event)"
+    [nzShowSizeChanger]="true"
+    [nzPageSizeOptions]="[10, 20, 50, 100]"
+    (nzPageSizeChange)="onPageSizeChange($event)"
+    (nzPageIndexChange)="loadTeachers()"
+  >
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Avatar</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Spécialisation</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (t of teacherTable.data; track t.id) {
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>
+            @if (t.profileImageUrl) {
+              <nz-avatar
+                nzShape="square"
+                [nzSrc]="t.profileImageUrl"
+                [nzAlt]="t.firstName"
+                nzSize="large"
+              />
+            } @else {
+              <nz-avatar
+                nzShape="square"
+                [nzText]="t.firstName.charAt(0) + t.lastName.charAt(0)"
+                nzSize="large"
+              />
+            }
+          </td>
+          <td>{{ t.lastName }}</td>
+          <td>{{ t.firstName }}</td>
+          <td>{{ t.email }}</td>
+          <td>{{ t.specialization }}</td>
+          <td>{{ t.role }}</td>
+          <td>
+            <a>Modifier</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a class="text-danger">Supprimer</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

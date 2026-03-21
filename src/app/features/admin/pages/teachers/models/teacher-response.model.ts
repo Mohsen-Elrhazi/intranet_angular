@@ -6,4 +6,5 @@ export interface TeacherResponse {
     phoneNumber: string;
     profileImageUrl: string;
     specialization: string;
+    role:string;
 }
