@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { Observable } from 'rxjs';
-import {  TeacherResponse } from '../models/teacher-response.model';
-import { ApiResponse } from '../../../../../core/models/api-response.model';
+import { TeacherResponse } from '../models/teacher-response.model';
+import { ApiResponse, PageResponse } from '../../../../../core/models/api-response.model';
 import { CreateTeacherRequest } from '../models/create-teacher-request.model';
 
 @Injectable({
@@ -13,15 +13,22 @@ export class TeacherService {
   private baseUrl = `${environment.baseUrl}/teachers`;
   private http = inject(HttpClient);
 
-  // getAllTeachers(): Observable<ApiResponse<Teacher[]>> {
-  //   return this.http.get<ApiResponse<Teacher[]>>(this.baseUrl);
-  // }
+  getAllTeachers(
+    page: number,
+    size: number,
+    search?: string,
+    specialization?: string,
+  ): Observable<ApiResponse<PageResponse<TeacherResponse>>> {
+    let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
 
-  // createTeacher(teacher: CreateTeacherRequest): Observable<ApiResponse<Teacher>> {
-  //   return this.http.post<ApiResponse<Teacher>>(this.baseUrl, teacher);
-  // }
+    if (search) params = params.set('search', search);
+    if (specialization) params = params.set('specialization', specialization);
 
-  // teacher.service.ts
+    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(this.baseUrl, { params });
+  }
+
   createTeacher(formData: FormData): Observable<ApiResponse<TeacherResponse>> {
     return this.http.post<ApiResponse<TeacherResponse>>(this.baseUrl, formData);
   }
