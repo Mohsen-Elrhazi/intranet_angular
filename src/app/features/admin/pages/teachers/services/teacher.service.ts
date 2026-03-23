@@ -19,9 +19,7 @@ export class TeacherService {
     search?: string,
     specialization?: string,
   ): Observable<ApiResponse<PageResponse<TeacherResponse>>> {
-    let params = new HttpParams()
-    .set('page', page.toString())
-    .set('size', size.toString());
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
 
     if (search) params = params.set('search', search);
     if (specialization) params = params.set('specialization', specialization);
@@ -31,5 +29,9 @@ export class TeacherService {
 
   createTeacher(formData: FormData): Observable<ApiResponse<TeacherResponse>> {
     return this.http.post<ApiResponse<TeacherResponse>>(this.baseUrl, formData);
+  }
+
+  deleteTeacher(id: number): Observable<ApiResponse<void>>{
+    return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
   }
 }
