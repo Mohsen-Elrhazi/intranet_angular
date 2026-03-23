@@ -1,6 +1,5 @@
-
 <div
-  class="flex items-center justify-between gap-4 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200"
+  class="flex items-center justify-between gap-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
 >
   <div class="flex items-center gap-3 flex-nowrap">
     <!-- search -->
@@ -46,22 +45,22 @@
     </nz-select> -->
 
     <button nz-button (click)="resetFilters()">
-      <!-- <nz-icon nzType="rest" nzTheme="outline" /> -->
-       <nz-icon nzType="reload" nzTheme="outline" />
+      <nz-icon nzType="reload" nzTheme="outline" />
       <span>Réinitialiser</span>
     </button>
   </div>
 
   <button nz-button nzType="primary" (click)="showModal()">
     <nz-icon nzType="plus-circle" nzTheme="outline" />
-    <span>Ajouter un enseignant</span>
+    <span>Ajouter</span>
   </button>
 </div>
 
 <!--  -->
-<div class="shadow-sm border border-gray-100 rounded-lg overflow-hidden">
+<!-- <div class="shadow-sm border border-gray-100 rounded-lg overflow-hidden">
   <nz-table
     #teacherTable
+    ngSize="small"
     [nzData]="teachers()"
     [nzFrontPagination]="false"
     [nzTotal]="totalElements()"
@@ -120,4 +119,67 @@
       }
     </tbody>
   </nz-table>
+</div> -->
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  @for (t of teachers(); track t.id) {
+    <nz-card [nzActions]="[actionSetting, actionEdit, actionDelete]" [nzHoverable]="true">
+      <nz-card-meta
+        [nzAvatar]="avatarTemplate"
+        [nzTitle]="titleTemplate"
+        [nzDescription]="descriptionTemplate"
+      />
+    </nz-card>
+
+    <ng-template #avatarTemplate>
+      @if (t.profileImageUrl) {
+        <nz-avatar [nzSrc]="t.profileImageUrl" [nzAlt]="t.firstName" nzSize="large" />
+      } @else {
+        <nz-avatar [nzText]="t.firstName.charAt(0) + t.lastName.charAt(0)" nzSize="large" />
+      }
+    </ng-template>
+
+    <ng-template #titleTemplate>
+      <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
+        {{ t.firstName }} {{ t.lastName }}
+      </div>
+    </ng-template>
+
+    <ng-template #descriptionTemplate>
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center">
+          <nz-tag
+            [nzColor]="'green'"
+            class="m-0 px-2 py-0.5 text-[11px] font-medium border-blue-200"
+          >
+            <span nz-icon nzType="mail" class="mr-1"></span>
+            {{ t.email }}
+          </nz-tag>
+        </div>
+
+        <div class="flex items-center">
+          <nz-tag
+            [nzColor]="'blue'"
+            class="m-0 px-2 py-0.5 text-[11px] font-medium border-blue-200"
+          >
+            <span nz-icon nzType="book" class="mr-1"></span>
+            {{ t.specialization }}
+          </nz-tag>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #actionSetting>
+      <nz-icon nzType="setting" nzSize="small" />
+    </ng-template>
+    <ng-template #actionEdit>
+      <button>
+        <nz-icon nzType="edit" />
+      </button>
+    </ng-template>
+    <ng-template #actionDelete>
+      <button (click)="deleteTeacher(t.id)">
+        <nz-icon nzType="delete"  />
+      </button>
+    </ng-template>
+  }
 </div>

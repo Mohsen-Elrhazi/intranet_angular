@@ -13,6 +13,10 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-teachers',
@@ -27,6 +31,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     FormsModule,
     NzInputModule,
     NzSelectModule,
+NzCardModule, NzTagModule, NzTooltipModule
   ],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',
@@ -34,11 +39,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 export class TeachersComponent implements OnInit {
   private teacherService = inject(TeacherService);
   private modalService = inject(NzModalService);
+  private messageService = inject(NzMessageService);
 
   teachers = signal<TeacherResponse[]>([]);
   totalElements = signal(0);
   pageIndex = 1; // Ng-Zorro commence à 1, Spring à 0
-  pageSize = 10;
+  pageSize = 12;
   searchText: string = '';
   specialization: string = '';
   loading = signal(false);
@@ -102,6 +108,28 @@ export class TeachersComponent implements OnInit {
       nzFooter: null,
       nzWidth: 750, //en px
       nzBodyStyle: { padding: '0' },
+    });
+  }
+
+  //supprimer enseignant(teacher)
+  deleteTeacher(id: number): void {
+     this.modalService.confirm({
+      nzTitle: 'voulez vous supprimer cet enseignant?',
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.teacherService.deleteTeacher(id).subscribe({
+          next: (response) => {
+            this.messageService.success(response.message);
+            this.loadTeachers();
+          },
+          error: (err) => {
+            this.messageService.error('erreur lors de suppression');
+          },
+        }),
+      nzCancelText: 'Non',
+      nzOnCancel: () => this.messageService.info('Cancel'),
     });
   }
 }
