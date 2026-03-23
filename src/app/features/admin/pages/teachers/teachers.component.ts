@@ -17,6 +17,7 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @Component({
   selector: 'app-teachers',
@@ -31,7 +32,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     FormsModule,
     NzInputModule,
     NzSelectModule,
-NzCardModule, NzTagModule, NzTooltipModule
+NzCardModule, NzTagModule, NzTooltipModule,NzPaginationModule
   ],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',

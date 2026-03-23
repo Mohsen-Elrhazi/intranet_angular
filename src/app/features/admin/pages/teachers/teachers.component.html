@@ -177,9 +177,27 @@
       </button>
     </ng-template>
     <ng-template #actionDelete>
-      <button (click)="deleteTeacher(t.id)">
-        <nz-icon nzType="delete"  />
+      <button (click)="deleteTeacher(t.id)" class="cursor-pointer">
+        <nz-icon nzType="delete" />
       </button>
     </ng-template>
   }
 </div>
+
+<!-- pagination -->
+<div class="flex justify-end mt-8 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+  <nz-pagination
+    [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize"
+    [nzTotal]="totalElements()"
+    [nzShowSizeChanger]="true"
+    [nzPageSizeOptions]="[8, 12, 24, 48]"
+    (nzPageIndexChange)="onPageIndexChange($event)"
+    (nzPageSizeChange)="onPageSizeChange($event)"
+    [nzShowTotal]="totalTemplate"
+  ></nz-pagination>
+</div>
+
+<ng-template #totalTemplate let-total>
+  <span class="text-gray-500 font-medium">Total : {{ total }} enseignants</span>
+</ng-template>
