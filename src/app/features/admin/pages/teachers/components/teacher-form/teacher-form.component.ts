@@ -5,7 +5,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzUploadChangeParam, NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { TeacherService } from '../../services/teacher.service';
 import { CreateTeacherRequest } from '../../models/create-teacher-request.model';
@@ -27,22 +27,66 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class TeacherFormComponent {
   private fb = inject(FormBuilder);
-  private modalRef = inject(NzModalRef); // C'est la télécommande de la modale
+  private modalRef = inject(NzModalRef);
   private teacherService = inject(TeacherService);
   private messageService = inject(NzMessageService);
 
   validateForm!: FormGroup;
-  isLoading = false;
+  isLoading = signal(false);
+
+  readonly nzModalData = inject(NZ_MODAL_DATA);
+  isEditMode = false;
+  teacherId?: number;
 
   ngOnInit() {
+    this.isEditMode = !!this.nzModalData?.teacher;
+    if (this.isEditMode) {
+      this.teacherId = this.nzModalData.teacher.id;
+    }
+
+    this.initForm();
+
+    if (this.isEditMode) {
+      this.patchFormValues();
+    }
+  }
+
+  private initForm() {
     this.validateForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      email: ['', this.isEditMode ? [] : [Validators.required, Validators.email]],
+      password: ['', this.isEditMode ? [] : [Validators.required, Validators.minLength(8)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[+]?[0-9 ]*$')]],
       specialization: ['', [Validators.required]],
     });
+
+    if (this.isEditMode) {
+      this.validateForm.get('email')?.disable();
+      this.validateForm.get('password')?.disable();
+    }
+  }
+
+  private patchFormValues() {
+    const t = this.nzModalData.teacher;
+    this.validateForm.patchValue({
+      firstName: t.firstName,
+      lastName: t.lastName,
+      email: t.email,
+      phoneNumber: t.phoneNumber,
+      specialization: t.specialization,
+    });
+
+    if (t.profileImageUrl) {
+      this.fileList.set([
+        {
+          uid: '-1',
+          name: 'Photo actuelle',
+          status: 'done',
+          url: t.profileImageUrl,
+        },
+      ]);
+    }
   }
 
   fileList = signal<NzUploadFile[]>([]);
@@ -56,6 +100,14 @@ export class TeacherFormComponent {
 
     reader.readAsDataURL(file as any);
     return false; // Empêche l'envoi auto
+  };
+
+  imageDeleted = false;
+
+  handleRemove = (file: NzUploadFile): boolean => {
+    this.imageDeleted = true;
+    this.fileList.set([]);
+    return true;
   };
 
   envoyer() {
@@ -73,7 +125,7 @@ export class TeacherFormComponent {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const values: CreateTeacherRequest = this.validateForm.value;
 
@@ -81,24 +133,43 @@ export class TeacherFormComponent {
 
     formData.append('firstName', values.firstName); // ou formData.append('firstName', this.validateForm.value.firstName);
     formData.append('lastName', values.lastName);
-    formData.append('email', values.email);
-    formData.append('password', values.password);
+    // formData.append('email', values.email);
+    // formData.append('password', values.password);
     formData.append('phoneNumber', values.phoneNumber);
     formData.append('specialization', values.specialization);
 
-    const files = this.fileList();
-    if (files.length > 0) {
-      formData.append('profileImage', files[0] as any);
+    if (!this.isEditMode) {
+      formData.append('email', values.email);
+      formData.append('password', values.password);
     }
 
-    this.teacherService.createTeacher(formData).subscribe({
+    const files = this.fileList();
+
+    if (files.length > 0) {
+      const fileCandidate = files[0].originFileObj || (files[0] as any);
+
+      if (fileCandidate instanceof File || fileCandidate instanceof Blob) {
+        formData.append('profileImage', fileCandidate);
+      }
+    }
+
+    if (this.isEditMode) {
+      formData.append('deleteImage', this.imageDeleted.toString());
+    }
+
+    const request$ = this.isEditMode
+      ? this.teacherService.updateTeacher(this.teacherId!, formData)
+      : this.teacherService.createTeacher(formData);
+
+    request$.subscribe({
       next: (response) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.messageService.success(response.message);
-        this.modalRef.close();
+        this.modalRef.close(true);
+        console.log('Enseignant créé/modifié avec succès :', response);
       },
       error: (err) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
 
         if ((err.status === 400 || err.status === 409) && err.error?.errors?.email) {
           const errorMessage = err.error.errors.email;
