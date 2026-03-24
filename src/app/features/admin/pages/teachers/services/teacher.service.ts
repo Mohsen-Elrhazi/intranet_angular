@@ -31,7 +31,11 @@ export class TeacherService {
     return this.http.post<ApiResponse<TeacherResponse>>(this.baseUrl, formData);
   }
 
-  deleteTeacher(id: number): Observable<ApiResponse<void>>{
+  deleteTeacher(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
+
+  updateTeacher(id: number, formData: FormData): Observable<ApiResponse<TeacherResponse>> {
+    return this.http.patch<ApiResponse<TeacherResponse>>(`${this.baseUrl}/${id}`, formData);
   }
 }
