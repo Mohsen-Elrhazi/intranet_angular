@@ -22,6 +22,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer';
 import { TeacherDetailsComponent } from './components/teacher-details/teacher-details.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzTooltipDirective } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-teachers',
@@ -43,6 +44,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzEmptyModule,
     NzDrawerModule,
     NzSpinModule,
+    NzTooltipDirective,
   ],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',

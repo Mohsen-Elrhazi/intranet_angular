@@ -177,22 +177,22 @@
         </div>
       </ng-template>
       <ng-template #actionSetting>
-        <button>
+        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Paramètres de l'enseignant" >
           <nz-icon nzType="setting" nzSize="small" />
         </button>
       </ng-template>
       <ng-template #actionEdit>
-        <button (click)="showEditModal(t)">
+        <button (click)="showEditModal(t)" class="cursor-pointer" nz-tooltip nzTooltipTitle="Modifier l'enseignant" >
           <nz-icon nzType="edit" />
         </button>
       </ng-template>
       <ng-template #actionDelete>
-        <button (click)="deleteTeacher(t.id)" class="cursor-pointer">
+        <button (click)="deleteTeacher(t.id)" class="cursor-pointer" nz-tooltip nzTooltipTitle="Supprimer l'enseignant" >
           <nz-icon nzType="delete" />
         </button>
       </ng-template>
       <ng-template #actionProfile>
-        <button (click)="viewDetails(t.id)" class="cursor-pointer">
+        <button (click)="viewDetails(t.id)" class="cursor-pointer" nz-tooltip nzTooltipTitle="Voir le profil" nzTooltipColor="blue">
           <nz-icon nzType="idcard" nzTheme="outline" />
         </button>
       </ng-template>
