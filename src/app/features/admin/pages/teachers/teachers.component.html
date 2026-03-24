@@ -50,7 +50,7 @@
     </button>
   </div>
 
-  <button nz-button nzType="primary" (click)="showModal()">
+  <button nz-button nzType="primary" (click)="showCreateModal()">
     <nz-icon nzType="plus-circle" nzTheme="outline" />
     <span>Ajouter</span>
   </button>
@@ -121,6 +121,18 @@
   </nz-table>
 </div> -->
 
+@if(teachers().length === 0) {
+  <!-- <div class="flex flex-col items-center gap-3 py-20">
+    <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Aucun enseignant trouvé"></nz-empty>
+    <button nz-button nzType="primary" (click)="showCreateModal()">
+      <nz-icon nzType="plus-circle" nzTheme="outline" />
+      <span>Ajouter un enseignant</span>
+    </button>
+  </div> -->
+  <nz-empty />
+}@else{
+
+
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   @for (t of teachers(); track t.id) {
     <nz-card [nzActions]="[actionSetting, actionEdit, actionDelete]" [nzHoverable]="true">
@@ -172,7 +184,7 @@
       <nz-icon nzType="setting" nzSize="small" />
     </ng-template>
     <ng-template #actionEdit>
-      <button>
+      <button (click)="showEditModal(t)">
         <nz-icon nzType="edit" />
       </button>
     </ng-template>
@@ -197,7 +209,9 @@
     [nzShowTotal]="totalTemplate"
   ></nz-pagination>
 </div>
+}
+
 
 <ng-template #totalTemplate let-total>
-  <span class="text-gray-500 font-medium">Total : {{ total }} enseignants</span>
+  <span class=" ">Total : {{ total }} enseignants</span>
 </ng-template>

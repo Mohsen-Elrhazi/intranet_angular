@@ -18,6 +18,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @Component({
   selector: 'app-teachers',
@@ -32,7 +33,11 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
     FormsModule,
     NzInputModule,
     NzSelectModule,
-NzCardModule, NzTagModule, NzTooltipModule,NzPaginationModule
+    NzCardModule,
+    NzTagModule,
+    NzTooltipModule,
+    NzPaginationModule,
+    NzEmptyModule,
   ],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',
@@ -50,8 +55,6 @@ export class TeachersComponent implements OnInit {
   specialization: string = '';
   loading = signal(false);
 
-
-
   // specializations = ['Informatique', 'Mathématiques', 'Physique', 'Économie'];
 
   ngOnInit() {
@@ -61,12 +64,7 @@ export class TeachersComponent implements OnInit {
   loadTeachers() {
     this.loading.set(true);
     this.teacherService
-      .getAllTeachers(
-        this.pageIndex - 1,
-        this.pageSize,
-        this.searchText,
-        this.specialization,
-      )
+      .getAllTeachers(this.pageIndex - 1, this.pageSize, this.searchText, this.specialization)
       .subscribe({
         next: (response) => {
           this.teachers.set(response.data.content);
@@ -84,7 +82,7 @@ export class TeachersComponent implements OnInit {
 
   onPageSizeChange(size: number): void {
     this.pageSize = size;
-    this.pageIndex = 1; 
+    this.pageIndex = 1;
     this.loadTeachers();
   }
 
@@ -101,20 +99,24 @@ export class TeachersComponent implements OnInit {
     this.loadTeachers();
   }
 
-  // Afficher la modale d'ajout d'enseignant
-  showModal(): void {
-    this.modalService.create({
+  showCreateModal(): void {
+    const modal = this.modalService.create({
       nzTitle: 'Ajouter un enseignant',
       nzContent: TeacherFormComponent,
       nzFooter: null,
       nzWidth: 750, //en px
       nzBodyStyle: { padding: '0' },
     });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadTeachers();
+      }
+    });
   }
 
-  //supprimer enseignant(teacher)
   deleteTeacher(id: number): void {
-     this.modalService.confirm({
+    this.modalService.confirm({
       nzTitle: 'voulez vous supprimer cet enseignant?',
       nzOkText: 'Oui',
       nzOkType: 'primary',
@@ -131,6 +133,23 @@ export class TeachersComponent implements OnInit {
         }),
       nzCancelText: 'Non',
       nzOnCancel: () => this.messageService.info('Cancel'),
+    });
+  }
+
+  showEditModal(teacher: TeacherResponse): void {
+    const modal = this.modalService.create({
+      nzTitle: 'Modifier un enseignant',
+      nzContent: TeacherFormComponent,
+      nzFooter: null,
+      nzWidth: 750,
+      nzBodyStyle: { padding: '0' },
+      nzData: { teacher: teacher },
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadTeachers();
+      }
     });
   }
 }
