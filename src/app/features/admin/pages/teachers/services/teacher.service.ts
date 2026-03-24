@@ -38,4 +38,8 @@ export class TeacherService {
   updateTeacher(id: number, formData: FormData): Observable<ApiResponse<TeacherResponse>> {
     return this.http.patch<ApiResponse<TeacherResponse>>(`${this.baseUrl}/${id}`, formData);
   }
+
+  getTeacherById(id: number): Observable<ApiResponse<TeacherResponse>> {
+    return this.http.get<ApiResponse<TeacherResponse>>(`${this.baseUrl}/${id}`);
+  }
 }
