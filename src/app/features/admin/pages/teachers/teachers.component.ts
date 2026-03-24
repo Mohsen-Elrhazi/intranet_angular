@@ -19,6 +19,9 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzDrawerModule, NzDrawerService } from 'ng-zorro-antd/drawer';
+import { TeacherDetailsComponent } from './components/teacher-details/teacher-details.component';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-teachers',
@@ -38,6 +41,8 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzTooltipModule,
     NzPaginationModule,
     NzEmptyModule,
+    NzDrawerModule,
+    NzSpinModule,
   ],
   templateUrl: './teachers.component.html',
   styleUrl: './teachers.component.css',
@@ -46,6 +51,7 @@ export class TeachersComponent implements OnInit {
   private teacherService = inject(TeacherService);
   private modalService = inject(NzModalService);
   private messageService = inject(NzMessageService);
+  private drawerService = inject(NzDrawerService);
 
   teachers = signal<TeacherResponse[]>([]);
   totalElements = signal(0);
@@ -149,6 +155,22 @@ export class TeachersComponent implements OnInit {
     modal.afterClose.subscribe((result) => {
       if (result === true) {
         this.loadTeachers();
+      }
+    });
+  }
+
+  viewDetails(id: number): void {
+    const drawer = this.drawerService.create({
+      nzTitle: "Détails de l'enseignant",
+      nzContent: TeacherDetailsComponent,
+      nzWidth: 600,
+      nzBodyStyle: { padding: '0' },
+      nzData: { teacherId: id },
+    });
+
+    drawer.afterClose.subscribe((teacherToEdit) => {
+      if (teacherToEdit) {
+        this.showEditModal(teacherToEdit);
       }
     });
   }
