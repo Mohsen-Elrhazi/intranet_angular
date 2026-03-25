@@ -54,7 +54,12 @@ export class TeacherService {
     if (search) params = params.set('search', search);
     if (specialization) params = params.set('specialization', specialization);
 
-    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(`${this.baseUrl}/deleted`, { params });
+    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(`${this.baseUrl}/deleted`, {
+      params,
+    });
   }
-  
+
+  restoreTeacher(id: number): Observable<ApiResponse<void>> {
+    return this.http.patch<ApiResponse<void>>(`${this.baseUrl}/${id}/restore`, {});
+  }
 }
