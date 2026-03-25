@@ -13,20 +13,6 @@ export class TeacherService {
   private baseUrl = `${environment.baseUrl}/teachers`;
   private http = inject(HttpClient);
 
-  getAllTeachers(
-    page: number,
-    size: number,
-    search?: string,
-    specialization?: string,
-  ): Observable<ApiResponse<PageResponse<TeacherResponse>>> {
-    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-
-    if (search) params = params.set('search', search);
-    if (specialization) params = params.set('specialization', specialization);
-
-    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(this.baseUrl, { params });
-  }
-
   createTeacher(formData: FormData): Observable<ApiResponse<TeacherResponse>> {
     return this.http.post<ApiResponse<TeacherResponse>>(this.baseUrl, formData);
   }
@@ -42,4 +28,33 @@ export class TeacherService {
   getTeacherById(id: number): Observable<ApiResponse<TeacherResponse>> {
     return this.http.get<ApiResponse<TeacherResponse>>(`${this.baseUrl}/${id}`);
   }
+
+  findAllTeachers(
+    page: number,
+    size: number,
+    search?: string,
+    specialization?: string,
+  ): Observable<ApiResponse<PageResponse<TeacherResponse>>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+    if (search) params = params.set('search', search);
+    if (specialization) params = params.set('specialization', specialization);
+
+    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(this.baseUrl, { params });
+  }
+
+  findAllDeletedTeachers(
+    page: number,
+    size: number,
+    search?: string,
+    specialization?: string,
+  ): Observable<ApiResponse<PageResponse<TeacherResponse>>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+    if (search) params = params.set('search', search);
+    if (specialization) params = params.set('specialization', specialization);
+
+    return this.http.get<ApiResponse<PageResponse<TeacherResponse>>>(`${this.baseUrl}/deleted`, { params });
+  }
+  
 }
