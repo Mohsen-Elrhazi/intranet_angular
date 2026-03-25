@@ -27,7 +27,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 @Component({
   selector: 'app-deleted-teachers',
   imports: [
-     NzButtonModule,
+    NzButtonModule,
     NzModalModule,
     NzIconModule,
     NzDividerModule,
@@ -44,7 +44,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzDrawerModule,
     NzSpinModule,
     NzTooltipDirective,
-    NzBadgeModule
+    NzBadgeModule,
   ],
   templateUrl: './deleted-teachers.component.html',
   styleUrl: './deleted-teachers.component.css',
@@ -72,7 +72,12 @@ export class DeletedTeachersComponent {
   loadTeachers() {
     this.loading.set(true);
     this.teacherService
-      .findAllDeletedTeachers(this.pageIndex - 1, this.pageSize, this.searchText, this.specialization)
+      .findAllDeletedTeachers(
+        this.pageIndex - 1,
+        this.pageSize,
+        this.searchText,
+        this.specialization,
+      )
       .subscribe({
         next: (response) => {
           this.teachers.set(response.data.content);
@@ -107,26 +112,25 @@ export class DeletedTeachersComponent {
     this.loadTeachers();
   }
 
-
   restoreTeacher(id: number): void {
-    // this.modalService.confirm({
-    //   nzTitle: 'voulez vous restaurer cet enseignant?',
-    //   nzOkText: 'Oui',
-    //   nzOkType: 'primary',
-    //   nzOkDanger: true,
-    //   nzOnOk: () =>
-    //     this.teacherService.deleteTeacher(id).subscribe({
-    //       next: (response) => {
-    //         this.messageService.success(response.message);
-    //         this.loadTeachers();
-    //       },
-    //       error: (err) => {
-    //         this.messageService.error('erreur lors de suppression');
-    //       },
-    //     }),
-    //   nzCancelText: 'Non',
-    //   nzOnCancel: () => this.messageService.info('Cancel'),
-    // });
+    this.modalService.confirm({
+      nzTitle: 'voulez vous restaurer cet enseignant?',
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.teacherService.restoreTeacher(id).subscribe({
+          next: (response) => {
+            this.messageService.success(response.message);
+            this.loadTeachers();
+          },
+          error: (err) => {
+            this.messageService.error("erreur lors de restauration de l'enseignant");
+          },
+        }),
+      nzCancelText: 'Non',
+      nzOnCancel: () => this.messageService.info('Cancel'),
+    });
   }
 
   showEditModal(teacher: TeacherResponse): void {
