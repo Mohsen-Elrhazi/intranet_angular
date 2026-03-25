@@ -1,174 +1,75 @@
-<!-- <app-header></app-header>
-<main>
-  <app-sidebar></app-sidebar>
-  <router-outlet></router-outlet>
-</main> -->
+<nz-layout>
+  <nz-sider nzCollapsible nzWidth="200px">
+    <div class="logo"></div>
 
-<!-- <nz-layout>
-      <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
-        <div class="logo">Logo</div>
-        <ul nz-menu nzMode="inline">
-          
-          <li nz-menu-item>
-            <nz-icon nzType="user" />
-            <span>user</span>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      @for (item of filteredMenuItems(); track item.label) {
+        @if (item.children && item.children.length > 0) {
+          <li nz-submenu [nzTitle]="item.label" [nzIcon]="item.icon || ''">
+            <ul>
+              @for (child of item.children; track child.route) {
+                <li nz-menu-item nzMatchRouter>
+                  <a [routerLink]="child.route">{{ child.label }}</a>
+                </li>
+              }
+            </ul>
           </li>
-          <li nz-menu-item>
-            <nz-icon nzType="file" />
-            <span>File</span>
+        } @else {
+          <li nz-menu-item nzMatchRouter>
+            <a [routerLink]="item.route">
+              @if (item.icon) {
+                <nz-icon [nzType]="item.icon" />
+              }
+              <span>{{ item.label }}</span>
+            </a>
           </li>
-          <li nz-menu-item>
-            <nz-icon nzType="schol" />
-            <span>sholl</span>
-          </li>
-        </ul>
-      </nz-sider>
-      <nz-layout>
-        <nz-header >
-          <nz-icon
-            class="trigger"
-            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-            (click)="isCollapsed = !isCollapsed"
-          />
-
-           <a nz-dropdown [nzDropdownMenu]="menu">
-      Hover me
-      <nz-icon nzType="down" />
-    </a>
-    <nz-dropdown-menu #menu="nzDropdownMenu">
-      <ul nz-menu nzSelectable>
-        <li nz-menu-item>1st menu item</li>
-        <li nz-menu-item>2nd menu item</li>
-        <li nz-menu-item>3rd menu item</li>
-        <li nz-menu-item nzDanger>4th danger item</li>
-      </ul>
-    </nz-dropdown-menu>
-
-        </nz-header>
-        <nz-content>
-          <nz-breadcrumb>
-            <nz-breadcrumb-item>User</nz-breadcrumb-item>
-            <nz-breadcrumb-item>Bill</nz-breadcrumb-item>
-          </nz-breadcrumb>
-          <div class="inner-content">content 
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur sapiente delectus magnam sit, sint similique quo iusto aspernatur assumenda id dignissimos itaque pariatur ut sed beatae reiciendis quibusdam praesentium doloremque.</p>
-          
-          </div>
-        </nz-content>
-        <nz-footer></nz-footer>
-      </nz-layout>
-    </nz-layout> -->
-
-<!-- <nz-layout class="app-layout">
-  <nz-sider
-    nzCollapsible
-    [nzCollapsed]="layoutService.isCollapsed()"
-    nzTheme="light"
-    [nzTrigger]="null"
-    nzWidth="200px"
-  >
-    <app-sidebar></app-sidebar>
+        }
+      }
+    </ul>
   </nz-sider>
+  <nz-layout>
+    <!-- <nz-header /> -->
+    <nz-header>
+      <div class="flex justify-end items-center h-full px-4">
+        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+          <nz-avatar nzSize="large" nzIcon="user" />
+        </a>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <div class="bg-white shadow-lg min-w-[250px]">
+            <div class="flex items-center px-4 py-3 gap-3">
+              <nz-avatar nzSize="large" nzIcon="user" />
+              <div class="flex flex-col flex-1 overflow-hidden">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-gray-900 truncate text-sm">Bonnie Green</span>
+                </div>
+                <span class="text-sm text-gray-600 truncate">tet@gmail.com</span>
+              </div>
+            </div>
 
-  <nz-layout class="right-layout scrollable-content ">
-    <nz-header nzTheme="light">
-      <app-header></app-header>
+            <ul nz-menu nzSelectable class="border-none shadow-none">
+              <li nz-menu-item class="py-2">
+                <span nz-icon nzType="setting" class="mr-2"></span> Settings
+              </li>
+              <li nz-menu-item class="py-2">
+                <span nz-icon nzType="user" class="mr-2"></span> profile
+              </li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item nzDanger class="py-2" (click)="logout()">
+                <span nz-icon nzType="logout" class="mr-2"></span> Sign out
+              </li>
+            </ul>
+          </div>
+        </nz-dropdown-menu>
+      </div>
     </nz-header>
-
-    <nz-content class="">
-      <nz-breadcrumb>
-        <nz-breadcrumb-item>User</nz-breadcrumb-item>
-        <nz-breadcrumb-item>Bill</nz-breadcrumb-item>
-      </nz-breadcrumb>
-
+    <nz-content>
+      <!-- <nz-breadcrumb>
+        <nz-breadcrumb-item>Enseignant</nz-breadcrumb-item>
+        <nz-breadcrumb-item>Active</nz-breadcrumb-item>
+      </nz-breadcrumb> -->
       <div class="inner-content">
         <router-outlet></router-outlet>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Libero in vitae sint at quos
-          blanditiis nesciunt modi qui cum? Voluptatem, voluptates ex. Dolores asperiores eius
-          mollitia consectetur accusamus ipsum molestiae.
-        </p>
-        
       </div>
     </nz-content>
-  </nz-layout>
-</nz-layout> -->
-
-
-<!-- test -->
- <nz-layout class="app-layout">
-  <nz-sider
-    nzCollapsible
-    [nzCollapsed]="layoutService.isCollapsed()"
-    nzTheme="light"
-    [nzTrigger]="null"
-    nzWidth="200px"
-  >
-    <app-sidebar></app-sidebar>
-  </nz-sider>
-
-  <nz-layout class="right-layout">
-    
-    <nz-header nzTheme="light">
-      <app-header></app-header>
-    </nz-header>
-
-    <nz-content class="scrollable-content">
-        <!-- <div class="p-4"> <nz-breadcrumb>
-            <nz-breadcrumb-item>User</nz-breadcrumb-item>
-          <nz-breadcrumb-item>Bill</nz-breadcrumb-item>
-        </nz-breadcrumb> -->
-
-        <div class="inner-content">
-          <router-outlet></router-outlet>
-        </div>
-      <!-- </div> -->
-    </nz-content>
-
   </nz-layout>
 </nz-layout>
