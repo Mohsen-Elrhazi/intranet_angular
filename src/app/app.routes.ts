@@ -8,7 +8,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: '',
-    component: MainLayoutComponent, // LE PARENT EST ICI
+    component: MainLayoutComponent, 
     children: [
       {
         path: 'admin',

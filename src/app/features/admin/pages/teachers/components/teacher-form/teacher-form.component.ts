@@ -133,8 +133,7 @@ export class TeacherFormComponent {
 
     formData.append('firstName', values.firstName); // ou formData.append('firstName', this.validateForm.value.firstName);
     formData.append('lastName', values.lastName);
-    // formData.append('email', values.email);
-    // formData.append('password', values.password);
+    
     formData.append('phoneNumber', values.phoneNumber);
     formData.append('specialization', values.specialization);
 

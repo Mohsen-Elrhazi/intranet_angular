@@ -73,7 +73,7 @@ export class ActiveTeachersComponent {
   loadTeachers() {
     this.loading.set(true);
     this.teacherService
-      .getAllTeachers(this.pageIndex - 1, this.pageSize, this.searchText, this.specialization)
+      .findAllTeachers(this.pageIndex - 1, this.pageSize, this.searchText, this.specialization)
       .subscribe({
         next: (response) => {
           this.teachers.set(response.data.content);

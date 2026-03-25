@@ -67,7 +67,7 @@ export const MENU_ITEMS: MenuItem[] = [
     children: [
       {
         label: ' Actifs',
-        route: '/admin/enseignants',
+        route: '/admin/enseignants/actifs',
         roles: ['ADMIN'],
       },
       {

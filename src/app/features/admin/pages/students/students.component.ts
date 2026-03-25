@@ -18,6 +18,7 @@ export class StudentsComponent {
       nzTitle: 'Ajouter un étudiant',
       nzContent: StudentFormComponent,
       nzFooter: null, 
+      nzWidth: 750, //en px
       nzBodyStyle: { padding: '0' }, 
     });
   }

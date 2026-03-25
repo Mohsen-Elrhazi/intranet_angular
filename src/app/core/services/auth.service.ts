@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LoginRequest } from '../models/login-request.model';
@@ -16,6 +16,16 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
+  currentUser = signal<CustomJwtPayload | null>(this.decodeToken());
+
+  private decodeToken(): CustomJwtPayload | null {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) return null;
+
+    return jwtDecode<CustomJwtPayload>(accessToken);
+  }
+
   login(request: LoginRequest): Observable<ApiResponse<AuthResponse>> {
     return this.http.post<ApiResponse<AuthResponse>>(`${this.baseUrl}/login`, request);
   }
@@ -23,6 +33,8 @@ export class AuthService {
   saveTokens(accessToken: string, refreshToken: string): void {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+
+    this.currentUser.set(this.decodeToken());
   }
 
   getUserRole(): string | null {
@@ -48,5 +60,6 @@ export class AuthService {
   private cleanLocalStorage() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    this.currentUser.set(null);
   }
 }

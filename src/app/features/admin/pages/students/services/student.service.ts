@@ -16,4 +16,5 @@ export class StudentService {
   createStudent(formData: FormData): Observable<ApiResponse<StudentResponse>> {
     return this.http.post<ApiResponse<StudentResponse>>(this.baseUrl, formData);
   }
+
 }
