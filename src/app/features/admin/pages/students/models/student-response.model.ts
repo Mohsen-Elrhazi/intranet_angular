@@ -6,4 +6,5 @@ export interface StudentResponse {
   phoneNumber: string;
   profileImageUrl: string;
   cne: string;
+  role: string;
 }

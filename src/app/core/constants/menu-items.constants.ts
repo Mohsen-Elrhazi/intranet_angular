@@ -82,6 +82,18 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: 'user',
     route: '/admin/etudiants',
     roles: ['ADMIN'],
+    children: [
+      {
+        label: ' Actifs',
+        route: '/admin/etudiants/actifs',
+        roles: ['ADMIN'],
+      },
+      {
+        label: ' Supprimés',
+        route: '/admin/etudiants/supprimes',
+        roles: ['ADMIN'],
+      },
+    ],
   },
 
   // --- TEACHER ---

@@ -4,6 +4,8 @@ import { DepartmentsComponent } from './pages/departments/departments.component'
 import { ActiveTeachersComponent } from './pages/teachers/pages/active-teachers/active-teachers.component';
 import { DeletedTeachersComponent } from './pages/teachers/pages/deleted-teachers/deleted-teachers.component';
 import { Routes } from '@angular/router';
+import { ActiveStudentsComponent } from './pages/students/pages/active-students/active-students.component';
+import { DeletedStudentsComponent } from './pages/students/pages/deleted-students/deleted-students.component';
 
 export const adminRoutes: Routes = [
   {
@@ -26,7 +28,21 @@ export const adminRoutes: Routes = [
   },
   {
     path: 'etudiants',
-    component: StudentsComponent,
+   children: [
+      {
+        path: 'actifs',
+        component: ActiveStudentsComponent,
+      },
+      {
+        path: 'supprimes',
+        component: DeletedStudentsComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'actifs',
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: 'departements',

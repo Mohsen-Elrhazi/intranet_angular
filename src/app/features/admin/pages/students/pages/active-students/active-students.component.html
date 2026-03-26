@@ -1,0 +1,167 @@
+<div
+  class="flex items-center justify-between gap-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+>
+  <div class="flex items-center gap-3 flex-nowrap">
+    <!-- search -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nom ou prénom..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+    <!-- specialization -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="CNE"
+        [(ngModel)]="cne"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+
+
+    <button nz-button (click)="resetFilters()">
+      <nz-icon nzType="reload" nzTheme="outline" />
+      <span>Réinitialiser</span>
+    </button>
+  </div>
+
+  <button nz-button nzType="primary" (click)="showCreateModal()">
+    <nz-icon nzType="plus-circle" nzTheme="outline" />
+    <span>Ajouter</span>
+  </button>
+</div>
+
+
+
+<!-- @if (loading()) {
+  <div class="p-10 flex justify-center items-center h-full">
+    <nz-spin nzSize="large"></nz-spin>
+  </div>
+} @else  -->
+@if (students().length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (s of students(); track s.id) {
+      <nz-ribbon nzText="S" nzColor="red">
+        <nz-card
+          [nzActions]="[actionSetting, actionEdit, actionDelete, actionProfile]"
+          [nzHoverable]="true"
+        >
+          <nz-card-meta
+            [nzAvatar]="avatarTemplate"
+            [nzTitle]="titleTemplate"
+            [nzDescription]="descriptionTemplate"
+          />
+        </nz-card>
+      </nz-ribbon>
+
+      <ng-template #avatarTemplate>
+        @if (s.profileImageUrl) {
+          <nz-avatar [nzSrc]="s.profileImageUrl" [nzAlt]="s.firstName" nzSize="large" />
+        } @else {
+          <nz-avatar [nzText]="s.firstName.charAt(0) + s.lastName.charAt(0)" nzSize="large" />
+        }
+      </ng-template>
+
+      <ng-template #titleTemplate>
+        <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
+          {{ s.firstName }} {{ s.lastName }}
+        </div>
+      </ng-template>
+
+      <ng-template #descriptionTemplate>
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center">
+            <nz-tag
+              [nzColor]="'green'"
+              class="m-0 px-2 py-0.5 text-[11px] font-medium border-blue-200"
+            >
+              <span nz-icon nzType="mail" class="mr-1"></span>
+              {{ s.email }}
+            </nz-tag>
+          </div>
+
+          <div class="flex items-center">
+            <nz-tag
+              [nzColor]="'blue'"
+              class="m-0 px-2 py-0.5 text-[11px] font-medium border-blue-200"
+            >
+              <span nz-icon nzType="book" class="mr-1"></span>
+              {{ s.cne }}
+            </nz-tag>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #actionSetting>
+        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Paramètres de l'étudiant">
+          <nz-icon nzType="setting" nzSize="small" />
+        </button>
+      </ng-template>
+      <ng-template #actionEdit>
+        <button
+          (click)="showEditModal(s)"
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Modifier l'étudiant"
+        >
+          <nz-icon nzType="edit" />
+        </button>
+      </ng-template>
+      <ng-template #actionDelete>
+        <button
+          (click)="deleteStudent(s.id)"
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Supprimer l'étudiant"
+        >
+          <nz-icon nzType="delete" />
+        </button>
+      </ng-template>
+      <ng-template #actionProfile>
+        <button
+          (click)="viewDetails(s.id)"
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Voir le profil"
+          nzTooltipColor="blue"
+        >
+          <nz-icon nzType="idcard" nzTheme="outline" />
+        </button>
+      </ng-template>
+    }
+  </div>
+
+  <!-- pagination -->
+  <div class="flex justify-end mt-8 p-4">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalElements()"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[8, 12, 24, 48]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzShowTotal]="totalTemplate"
+    ></nz-pagination>
+  </div>
+} @else {
+  <nz-empty />
+}
+
+<ng-template #totalTemplate let-total>
+  <span class=" ">Total : {{ total }} étudiants</span>
+</ng-template>

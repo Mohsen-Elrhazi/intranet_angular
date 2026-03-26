@@ -1,0 +1,64 @@
+@if (student(); as s) {
+  <div class="flex flex-col h-full bg-white overflow-hidden">
+    <div class="relative mb-14">
+      <div class="h-32 w-full">
+        <img
+          src="https://www.shutterstock.com/image-photo/dark-blackboard-chalkboard-texture-background-600nw-2694967745.jpg"
+          alt="Background"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <div class="ml-3 absolute -bottom-12 left-6 bg-white shadow-sm">
+        <nz-avatar
+          [nzSize]="100"
+          nzShape="square"
+          [nzSrc]="s.profileImageUrl"
+          nzIcon="user"
+          class="shadow-sm border border-gray-200 rounded-lg"
+        >
+        </nz-avatar>
+      </div>
+    </div>
+
+    <div class="px-6 ml-3">
+      <div class="flex flex-col">
+        <h2 class="text-xl font-semibold text-gray-900 mb-1">{{ s.firstName }} {{ s.lastName }}</h2>
+      </div>
+    </div>
+
+    <nz-divider></nz-divider>
+
+    <div class="flex-1 px-6 ml-3 overflow-y-auto w-full">
+      <nz-descriptions nzTitle="Informations Personnelles" nzLayout="horizontal" [nzColumn]="2">
+        <nz-descriptions-item nzTitle="Prénom">{{ s.firstName }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Nom">{{ s.lastName }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Email">{{ s.email }} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Téléphone">{{ s.phoneNumber }}</nz-descriptions-item>
+      </nz-descriptions>
+
+      <nz-divider></nz-divider>
+
+      <nz-descriptions nzTitle="Détails Académiques" nzLayout="horizontal" [nzColumn]="2">
+        <nz-descriptions-item nzTitle="CNE">{{ s.cne }} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Role">
+          @if (s.role === 'STUDENT') {
+            Étudiant
+          }
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </div>
+
+    <div class="p-4 border-t border-gray-100 flex justify-end gap-3 bg-gray-50/30">
+      <button nz-button nzType="default" (click)="close()">Fermer</button>
+      <button nz-button nzType="primary" (click)="onEdit(s)">
+        <nz-icon nzType="edit" />
+        Modifier le profil
+      </button>
+    </div>
+  </div>
+} @else {
+  <div class="p-10 flex justify-center items-center h-full">
+    <nz-spin nzSize="large"></nz-spin>
+  </div>
+}
