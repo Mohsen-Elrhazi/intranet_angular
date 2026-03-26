@@ -95,7 +95,12 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-
+  {
+    label: 'Départements',
+    icon: 'bank',
+    route: '/admin/departements',
+    roles: ['ADMIN'],
+  },
   // --- TEACHER ---
 
   {

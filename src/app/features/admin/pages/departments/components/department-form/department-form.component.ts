@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -8,6 +8,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CreateDepartmentRequest } from '../../models/create-department-request.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-department-form',
@@ -22,11 +23,12 @@ export class DepartmentFormComponent {
   private messageService = inject(NzMessageService);
 
   validateForm!: FormGroup;
-  isLoading = false;
+  isLoading = signal(false);
 
   ngOnInit() {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required]],
+      description: [''],
     });
   }
 
@@ -45,24 +47,28 @@ export class DepartmentFormComponent {
       return;
     }
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const request: CreateDepartmentRequest = this.validateForm.value;
 
     this.departmentService.createDepartment(request).subscribe({
       next: (response) => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.messageService.success(response.message);
-        this.modalRef.close();
+        this.modalRef.close(true);
       },
-      error: (err) => {
-        this.isLoading = false;
-
-        if ((err.status === 400 || err.status === 409) && err.error?.errors?.name) {
-          const errorMessage = err.error.errors.name;
-          this.messageService.error(errorMessage);
-
-          this.validateForm.get('name')?.setErrors({ backendError: errorMessage });
+      error: (err: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        // console.log('Error response:', err);
+        const backendResponse = err.error;
+        if (backendResponse?.errors) {
+          if (backendResponse.errors.name) {
+            const errorMessage = backendResponse.errors.name;
+            this.validateForm.get('name')?.setErrors({ backendError: errorMessage });
+            this.messageService.error(errorMessage);
+          }
+        } else if (backendResponse?.message) {
+          this.messageService.error(backendResponse.message);
         } else {
           this.messageService.error('Une erreur est survenue. Veuillez réessayer.');
         }

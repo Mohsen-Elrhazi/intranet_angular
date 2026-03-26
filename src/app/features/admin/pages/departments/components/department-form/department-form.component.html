@@ -19,6 +19,20 @@
         </ng-template>
       </nz-form-control>
     </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label >Description</nz-form-label>
+
+      <nz-form-control nzHasFeedback [nzErrorTip]="descriptionErrorTpl">
+        <input nz-input formControlName="description" placeholder="Entrez la description" />
+
+        <ng-template #descriptionErrorTpl let-control>
+          @if (control.hasError('required')) {
+            La description du département est obligatoire !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
   </div>
 
   <div class="h-[1px] bg-gray-200"></div>
@@ -26,6 +40,6 @@
   <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
     <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
 
-    <button [nzLoading]="isLoading" nz-button nzType="primary" type="submit">Ajouter</button>
+    <button [nzLoading]="isLoading()" nz-button nzType="primary" type="submit">Ajouter</button>
   </div>
 </form>

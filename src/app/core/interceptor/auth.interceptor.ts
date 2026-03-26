@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = localStorage.getItem('accessToken');
 
-  if (token) {
+  // if (token) {
     const authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -22,12 +22,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         if (error.status === 401) {
           return handleRefresh(authReq, next, authService, router);
         }
-        throw throwError(() => error);
+        return throwError(() => error);
       }),
     );
-  } else {
-    return next(req);
-  }
+  // } else {
+  //   return next(req);
+  // }
 };
 
 const handleRefresh = (
