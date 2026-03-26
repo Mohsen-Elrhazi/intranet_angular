@@ -41,5 +41,20 @@ export class StudentService {
   updateStudent(id: number, formData: FormData): Observable<ApiResponse<StudentResponse>> {
     return this.http.patch<ApiResponse<StudentResponse>>(`${this.baseUrl}/${id}`, formData);
   }
-  
+
+  restoreStudent(id: number): Observable<ApiResponse<void>> {
+    return this.http.patch<ApiResponse<void>>(`${this.baseUrl}/${id}/restore`, {});
+  }
+
+  findAllDeletedStudents(
+    page: number,
+    size: number,
+    search?: string,
+    cne?: string,
+  ): Observable<ApiResponse<PageResponse<StudentResponse>>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    if (search) params = params.set('search', search);
+    if (cne) params = params.set('cne', cne);
+    return this.http.get<ApiResponse<PageResponse<StudentResponse>>>(`${this.baseUrl}/deleted`, { params });
+  }
 }
