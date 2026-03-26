@@ -62,4 +62,13 @@ export class AuthService {
     localStorage.removeItem('refreshToken');
     this.currentUser.set(null);
   }
+
+  refreshToken(): Observable<ApiResponse<AuthResponse>> {
+    const refreshToken = localStorage.getItem('refreshToken');
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.baseUrl}/refresh-token`, { refreshToken }).pipe(
+      tap((response) => {
+        this.saveTokens(response.data.accessToken, response.data.refreshToken);
+      })
+    );
+  }
 }
