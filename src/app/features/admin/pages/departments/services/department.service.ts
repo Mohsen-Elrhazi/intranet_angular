@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse } from '../../../../../core/models/api-response.model';
+import { ApiResponse, PageResponse } from '../../../../../core/models/api-response.model';
 import { DepartmentResponse } from '../models/department-response.model';
 import { CreateDepartmentRequest } from '../models/create-department-request.model';
 
@@ -14,8 +14,20 @@ export class DepartmentService {
 
   private http = inject(HttpClient);
 
-  createDepartment(request: CreateDepartmentRequest): Observable<ApiResponse<DepartmentResponse>>{
+  createDepartment(request: CreateDepartmentRequest): Observable<ApiResponse<DepartmentResponse>> {
     return this.http.post<ApiResponse<DepartmentResponse>>(this.baseUrl, request);
   }
-  
+
+  findAllDepartments(
+    page: number,
+    size: number,
+    name?: string,
+  ): Observable<ApiResponse<PageResponse<DepartmentResponse>>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+    if (name) {
+      params = params.set('name', name);
+    }
+    return this.http.get<ApiResponse<PageResponse<DepartmentResponse>>>(this.baseUrl, { params });
+  }
 }
