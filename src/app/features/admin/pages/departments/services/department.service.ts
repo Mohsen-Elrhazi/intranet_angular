@@ -30,4 +30,8 @@ export class DepartmentService {
     }
     return this.http.get<ApiResponse<PageResponse<DepartmentResponse>>>(this.baseUrl, { params });
   }
+
+  deleteDepartement(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
 }
