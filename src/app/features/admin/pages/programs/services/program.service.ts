@@ -5,6 +5,7 @@ import { CreateProgramRequest } from '../models/create-program-request.model';
 import { Observable } from 'rxjs';
 import { ApiResponse, PageResponse } from '../../../../../core/models/api-response.model';
 import { ProgramResponse } from '../models/program-response.model';
+import { UpdateProgramRequest } from '../models/update-program-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,13 @@ export class ProgramService {
       params = params.set('name', name);
     }
     return this.http.get<ApiResponse<PageResponse<ProgramResponse>>>(this.baseUrl, { params });
+  }
+
+  deleteProgram(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
+
+  updateProgram(id: number, request: UpdateProgramRequest): Observable<ApiResponse<ProgramResponse>> {
+    return this.http.patch<ApiResponse<ProgramResponse>>(`${this.baseUrl}/${id}`, request);
   }
 }

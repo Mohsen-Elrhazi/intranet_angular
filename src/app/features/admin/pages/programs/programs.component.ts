@@ -59,38 +59,21 @@ export class ProgramsComponent {
   name: string = '';
   loading = signal(false);
 
-    ngOnInit() {
+  ngOnInit() {
     this.loadPrograms();
-  }
-
-  showCreateModal(): void {
-    const modal = this.modalService.create({
-      nzTitle: 'Ajouter un programme',
-      nzContent: ProgramFormComponent,
-      nzFooter: null,
-      nzBodyStyle: { padding: '0' },
-    });
-
-    // modal.afterClose.subscribe((result) => {
-    //   if (result === true) {
-    //     this.loadPrograms();
-    //   }
-    // });
   }
 
   loadPrograms() {
     this.loading.set(true);
-    this.programService
-      .getAllPrograms(this.pageIndex - 1, this.pageSize, this.name)
-      .subscribe({
-        next: (response) => {
-          this.programs.set(response.data.content);
-          this.totalElements.set(response.data.totalElements);
-          this.loading.set(false);
-          console.log(response.data.content);
-        },
-        error: () => this.loading.set(false),
-      });
+    this.programService.getAllPrograms(this.pageIndex - 1, this.pageSize, this.name).subscribe({
+      next: (response) => {
+        this.programs.set(response.data.content);
+        this.totalElements.set(response.data.totalElements);
+        this.loading.set(false);
+        // console.log(response.data.content);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
   onPageIndexChange(index: number) {
@@ -114,5 +97,57 @@ export class ProgramsComponent {
     this.name = '';
     this.pageIndex = 1;
     this.loadPrograms();
+  }
+
+  deleteProgram(id: number): void {
+    this.modalService.confirm({
+      nzTitle: 'voulez vous supprimer ce programme?',
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.programService.deleteProgram(id).subscribe({
+          next: (response) => {
+            this.messageService.success(response.message);
+            this.loadPrograms();
+          },
+          error: (err) => {
+            this.messageService.error('erreur lors de suppression');
+          },
+        }),
+      nzCancelText: 'Non',
+      nzOnCancel: () => this.messageService.info('Cancel'),
+    });
+  }
+
+  showCreateModal(): void {
+    const modal = this.modalService.create({
+      nzTitle: 'Ajouter un programme',
+      nzContent: ProgramFormComponent,
+      nzFooter: null,
+      nzBodyStyle: { padding: '0' },
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadPrograms();
+      }
+    });
+  }
+
+  showEditModal(program: ProgramResponse): void {
+    const modal = this.modalService.create({
+      nzTitle: 'Modifier programme',
+      nzContent: ProgramFormComponent,
+      nzFooter: null,
+      nzBodyStyle: { padding: '0' },
+      nzData: { program: program },
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadPrograms();
+      }
+    });
   }
 }

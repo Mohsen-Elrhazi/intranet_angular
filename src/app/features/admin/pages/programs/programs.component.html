@@ -55,6 +55,7 @@
 
       <ng-template #actionEdit>
         <button
+        (click)="showEditModal(p)"
           class="cursor-pointer"
           nz-tooltip
           nzTooltipTitle="Modifier programme"
@@ -63,13 +64,14 @@
         </button>
       </ng-template>
       <ng-template #actionDelete>
-        <span
+        <button
+        (click)="deleteProgram(p.id)"
           class="cursor-pointer"
           nz-tooltip
           nzTooltipTitle="Supprimer programme"
         >
           <nz-icon nzType="delete" />
-        </span>
+        </button>
       </ng-template>
     }
   </div>

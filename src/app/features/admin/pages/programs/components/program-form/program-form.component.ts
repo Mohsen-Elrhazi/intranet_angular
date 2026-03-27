@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { ProgramService } from '../../services/program.service';
@@ -24,7 +24,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
   templateUrl: './program-form.component.html',
   styleUrl: './program-form.component.css',
 })
-export class ProgramFormComponent {
+export class ProgramFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private modalRef = inject(NzModalRef);
 
@@ -40,30 +40,43 @@ export class ProgramFormComponent {
   programId?: number;
 
   ngOnInit() {
+    // this.validateForm = this.fb.group({
+    //   name: ['', [Validators.required]],
+    //   description: [''],
+    //   departmentId: ['', [Validators.required]],
+    // });
+
+    this.loadDepartments();
+
+     this.isEditMode = !!this.nzModalData?.program;
+    if (this.isEditMode) {
+      this.programId = this.nzModalData.program.id;
+    }
+
+    this.initForm();
+
+    if (this.isEditMode) {
+      this.patchFormValues();
+    }
+
+  }
+
+  private initForm() {
     this.validateForm = this.fb.group({
       name: ['', [Validators.required]],
       description: [''],
-      departmentId: ['', [Validators.required]],
+      departmentId: [null, [Validators.required]],
     });
-
-    this.loadDepartments();
   }
 
-  // private initForm() {
-  //   this.validateForm = this.fb.group({
-  //     name: ['', this.isEditMode ? [] : [Validators.required]],
-  //     description: [''],
-  //     departmentId: [null, this.isEditMode ? [] : [Validators.required]],
-  //   });
-  // }
-
-  // private patchFormValues() {
-  //   const p = this.nzModalData.program;
-  //   this.validateForm.patchValue({
-  //     name: p.name,
-  //     description: p.description,
-  //   });
-  // }
+  private patchFormValues() {
+    const p = this.nzModalData.program;
+    this.validateForm.patchValue({
+      name: p.name,
+      description: p.description,
+      departmentId: p.department.id,
+    });
+  }
 
   departmentList = signal<DepartmentResponse[]>([]);
 
@@ -95,17 +108,32 @@ export class ProgramFormComponent {
 
     this.isLoading.set(true);
 
-    const request = this.validateForm.value;
+    const formValues = this.validateForm.value;
 
-    this.programService.createProgram(request).subscribe({
+    const request$ = this.isEditMode
+      ? this.programService.updateProgram(this.programId!, formValues)
+      : this.programService.createProgram(formValues);
+
+    request$.subscribe({
       next: (response) => {
         this.isLoading.set(false);
         this.messageService.success(response.message);
-        this.modalRef.close();
+        this.modalRef.close(true);
       },
-      error: () => {
+      error: (err) => {
         this.isLoading.set(false);
-        this.messageService.error('Erreur lors de la création du programme.');
+        const backendResponse = err.error;
+        if (backendResponse?.errors) {
+          if (backendResponse.errors.name) {
+            const errorMessage = backendResponse.errors.name;
+            this.validateForm.get('name')?.setErrors({ backendError: errorMessage });
+            this.messageService.error(errorMessage);
+          }
+        } else if (backendResponse?.message) {
+          this.messageService.error(backendResponse.message);
+        } else {
+          this.messageService.error('Une erreur est survenue. Veuillez réessayer.');
+        }
       }
     });
   }
