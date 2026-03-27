@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { DepartmentService } from '../../services/department.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -9,6 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CreateDepartmentRequest } from '../../models/create-department-request.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UpdateDepartmentRequest } from '../../models/update-department-request.model';
 
 @Component({
   selector: 'app-department-form',
@@ -25,10 +26,35 @@ export class DepartmentFormComponent {
   validateForm!: FormGroup;
   isLoading = signal(false);
 
+  readonly nzModalData = inject(NZ_MODAL_DATA);
+  isEditMode = false;
+  departmentId?: number;
+
   ngOnInit() {
+    this.isEditMode = !!this.nzModalData?.department;
+    if (this.isEditMode) {
+      this.departmentId = this.nzModalData.department.id;
+    }
+
+    this.initForm();
+
+    if (this.isEditMode) {
+      this.patchFormValues();
+    }
+  }
+
+  private initForm() {
     this.validateForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', this.isEditMode ? [] : [Validators.required]],
       description: [''],
+    });
+  }
+
+  private patchFormValues() {
+    const d = this.nzModalData.department;
+    this.validateForm.patchValue({
+      name: d.name,
+      description: d.description,
     });
   }
 
@@ -49,9 +75,13 @@ export class DepartmentFormComponent {
 
     this.isLoading.set(true);
 
-    const request: CreateDepartmentRequest = this.validateForm.value;
+    const formValues = this.validateForm.value;
 
-    this.departmentService.createDepartment(request).subscribe({
+    const request$ = this.isEditMode
+      ? this.departmentService.updateDepartment(this.departmentId!, formValues)
+      : this.departmentService.createDepartment(formValues);
+
+    request$.subscribe({
       next: (response) => {
         this.isLoading.set(false);
         this.messageService.success(response.message);

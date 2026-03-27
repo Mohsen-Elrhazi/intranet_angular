@@ -72,14 +72,14 @@
         </button>
       </ng-template>
       <ng-template #actionDelete>
-        <button
+        <span
           (click)="deleteDepartment(d.id)"
           class="cursor-pointer"
           nz-tooltip
           nzTooltipTitle="Supprimer département"
         >
           <nz-icon nzType="delete" />
-        </button>
+        </span>
       </ng-template>
     }
   </div>

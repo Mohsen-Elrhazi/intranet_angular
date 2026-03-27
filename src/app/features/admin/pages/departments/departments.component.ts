@@ -53,21 +53,6 @@ export class DepartmentsComponent implements OnInit {
   private messageService = inject(NzMessageService);
   private drawerService = inject(NzDrawerService);
 
-  showCreateModal(): void {
-    const modal = this.modalService.create({
-      nzTitle: 'Ajouter un departement',
-      nzContent: DepartmentFormComponent,
-      nzFooter: null,
-      nzBodyStyle: { padding: '0' },
-    });
-
-    modal.afterClose.subscribe((result) => {
-      if (result === true) {
-        this.loadDepartments();
-      }
-    });
-  }
-
   departments = signal<DepartmentResponse[]>([]);
   totalElements = signal(0);
   pageIndex = 1;
@@ -116,7 +101,36 @@ export class DepartmentsComponent implements OnInit {
     this.loadDepartments();
   }
 
-  showEditModal(department: DepartmentResponse): void {}
+  showCreateModal(): void {
+    const modal = this.modalService.create({
+      nzTitle: 'Ajouter un departement',
+      nzContent: DepartmentFormComponent,
+      nzFooter: null,
+      nzBodyStyle: { padding: '0' },
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadDepartments();
+      }
+    });
+  }
+
+  showEditModal(department: DepartmentResponse): void {
+    const modal = this.modalService.create({
+      nzTitle: 'Modifier département',
+      nzContent: DepartmentFormComponent,
+      nzFooter: null,
+      nzBodyStyle: { padding: '0' },
+      nzData: { department: department },
+    });
+
+    modal.afterClose.subscribe((result) => {
+      if (result === true) {
+        this.loadDepartments();
+      }
+    });
+  }
 
   deleteDepartment(id: number): void {
     this.modalService.confirm({

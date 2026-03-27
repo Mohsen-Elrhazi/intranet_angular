@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ApiResponse, PageResponse } from '../../../../../core/models/api-response.model';
 import { DepartmentResponse } from '../models/department-response.model';
 import { CreateDepartmentRequest } from '../models/create-department-request.model';
+import { UpdateDepartmentRequest } from '../models/update-department-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,9 @@ export class DepartmentService {
 
   deleteDepartement(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
+
+  updateDepartment(id: number, request: UpdateDepartmentRequest): Observable<ApiResponse<DepartmentResponse>> {
+    return this.http.patch<ApiResponse<DepartmentResponse>>(`${this.baseUrl}/${id}`, request);
   }
 }
