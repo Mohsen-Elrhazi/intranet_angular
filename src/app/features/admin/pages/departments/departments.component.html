@@ -23,7 +23,6 @@
       <span nz-icon nzType="search" class="text-gray-400"></span>
     </ng-template>
 
-
     <button nz-button (click)="resetFilters()">
       <nz-icon nzType="reload" nzTheme="outline" />
       <span>Réinitialiser</span>
@@ -44,19 +43,9 @@
 @if (departments().length > 0) {
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @for (d of departments(); track d.id) {
-      <nz-ribbon nzText="S" nzColor="red">
-        <nz-card
-          [nzActions]="[actionSetting, actionEdit, actionDelete, actionProfile]"
-          [nzHoverable]="true"
-        >
-          <nz-card-meta
-            [nzTitle]="titleTemplate"
-            [nzDescription]="descriptionTemplate"
-          />
-        </nz-card>
-      </nz-ribbon>
-
-
+      <nz-card [nzActions]="[actionEdit, actionDelete]" [nzHoverable]="true">
+        <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
+      </nz-card>
 
       <ng-template #titleTemplate>
         <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
@@ -65,43 +54,32 @@
       </ng-template>
 
       <ng-template #descriptionTemplate>
-          {{d.description}}
-          
+        <div class="min-h-[20px] text-gray-500 text-sm line-clamp-2">
+          @if (d.description) {
+            <nz-tag nzColor="blue" >{{ d.description }}</nz-tag>
+          }
+        </div>
       </ng-template>
-      <ng-template #actionSetting>
-        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Paramètres de l'étudiant">
-          <nz-icon nzType="setting" nzSize="small" />
-        </button>
-      </ng-template>
+
       <ng-template #actionEdit>
-        <!-- <button
-          (click)="showEditModal(s)"
+        <button
+          (click)="showEditModal(d)"
           class="cursor-pointer"
           nz-tooltip
-          nzTooltipTitle="Modifier l'étudiant"
+          nzTooltipTitle="Modifier département"
         >
           <nz-icon nzType="edit" />
-        </button> -->
+        </button>
       </ng-template>
       <ng-template #actionDelete>
-        <!-- <button
-          (click)="deleteStudent(s.id)"
+        <button
+          (click)="deleteDepartment(d.id)"
           class="cursor-pointer"
           nz-tooltip
-          nzTooltipTitle="Supprimer l'étudiant"
+          nzTooltipTitle="Supprimer département"
         >
           <nz-icon nzType="delete" />
-        </button> -->
-      </ng-template>
-      <ng-template #actionProfile>
-        <!-- <button
-          (click)="viewDetails(s.id)"
-          class="cursor-pointer"
-          nz-tooltip
-          nzTooltipTitle="Voir le profil"
-        >
-          <nz-icon nzType="idcard" nzTheme="outline" />
-        </button> -->
+        </button>
       </ng-template>
     }
   </div>
@@ -124,5 +102,5 @@
 }
 
 <ng-template #totalTemplate let-total>
-  <span class=" ">Total : {{ total }} étudiants</span>
+  <span class=" ">Total : {{ total }} départements</span>
 </ng-template>

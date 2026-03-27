@@ -54,7 +54,7 @@ export class DepartmentsComponent implements OnInit {
   private drawerService = inject(NzDrawerService);
 
   showCreateModal(): void {
-   const modal = this.modalService.create({
+    const modal = this.modalService.create({
       nzTitle: 'Ajouter un departement',
       nzContent: DepartmentFormComponent,
       nzFooter: null,
@@ -114,5 +114,28 @@ export class DepartmentsComponent implements OnInit {
     this.name = '';
     this.pageIndex = 1;
     this.loadDepartments();
+  }
+
+  showEditModal(department: DepartmentResponse): void {}
+
+  deleteDepartment(id: number): void {
+    this.modalService.confirm({
+      nzTitle: 'voulez vous supprimer ce département?',
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.departmentService.deleteDepartement(id).subscribe({
+          next: (response) => {
+            this.messageService.success(response.message);
+            this.loadDepartments();
+          },
+          error: (err) => {
+            this.messageService.error('erreur lors de suppression');
+          },
+        }),
+      nzCancelText: 'Non',
+      nzOnCancel: () => this.messageService.info('Cancel'),
+    });
   }
 }
