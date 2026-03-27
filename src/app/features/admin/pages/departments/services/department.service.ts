@@ -39,4 +39,8 @@ export class DepartmentService {
   updateDepartment(id: number, request: UpdateDepartmentRequest): Observable<ApiResponse<DepartmentResponse>> {
     return this.http.patch<ApiResponse<DepartmentResponse>>(`${this.baseUrl}/${id}`, request);
   }
+
+  getDepartmentList(): Observable<ApiResponse<DepartmentResponse[]>> {
+    return this.http.get<ApiResponse<DepartmentResponse[]>>(`${this.baseUrl}/list`);
+  }
 }

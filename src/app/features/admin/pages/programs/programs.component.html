@@ -1,0 +1,96 @@
+<div
+  class="flex items-center justify-between gap-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+>
+  <div class="flex items-center gap-3 flex-nowrap">
+    <!-- search -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nom du filiere..."
+        [(ngModel)]="name"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+    <button nz-button (click)="resetFilters()">
+      <nz-icon nzType="reload" nzTheme="outline" />
+      <span>Réinitialiser</span>
+    </button>
+  </div>
+
+  <button nz-button nzType="primary" (click)="showCreateModal()">
+    <nz-icon nzType="plus-circle" nzTheme="outline" />
+    <span>Ajouter</span>
+  </button>
+</div>
+
+
+<!-- affichage des programmes -->
+ @if (programs().length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (p of programs(); track p.id) {
+      <nz-card [nzActions]="[actionEdit, actionDelete]" [nzHoverable]="true">
+        <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
+      </nz-card>
+
+      <ng-template #titleTemplate>
+        <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
+          {{ p.name }}
+        </div>
+      </ng-template>
+
+      <ng-template #descriptionTemplate>
+        <div class="min-h-[20px] text-gray-500 text-sm line-clamp-2">
+          @if (p.description) {
+            <nz-tag nzColor="blue" >{{ p.description }}</nz-tag>
+          }
+          departmet: {{ p.department.name }}
+        </div>
+      </ng-template>
+
+      <ng-template #actionEdit>
+        <button
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Modifier programme"
+        >
+          <nz-icon nzType="edit" />
+        </button>
+      </ng-template>
+      <ng-template #actionDelete>
+        <span
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Supprimer programme"
+        >
+          <nz-icon nzType="delete" />
+        </span>
+      </ng-template>
+    }
+  </div>
+
+  <!-- pagination -->
+  <div class="flex justify-end mt-8 p-4">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalElements()"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[8, 12, 24, 48]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzShowTotal]="totalTemplate"
+    ></nz-pagination>
+  </div>
+} @else {
+  <nz-empty />
+}
+
+<ng-template #totalTemplate let-total>
+  <span class=" ">Total : {{ total }} Filieres</span>
+</ng-template>

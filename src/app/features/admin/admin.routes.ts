@@ -6,6 +6,7 @@ import { DeletedTeachersComponent } from './pages/teachers/pages/deleted-teacher
 import { Routes } from '@angular/router';
 import { ActiveStudentsComponent } from './pages/students/pages/active-students/active-students.component';
 import { DeletedStudentsComponent } from './pages/students/pages/deleted-students/deleted-students.component';
+import { ProgramsComponent } from './pages/programs/programs.component';
 
 export const adminRoutes: Routes = [
   {
@@ -47,5 +48,9 @@ export const adminRoutes: Routes = [
   {
     path: 'departements',
     component: DepartmentsComponent,
+  },
+  {
+    path: 'filieres',
+    component: ProgramsComponent,
   },
 ];
