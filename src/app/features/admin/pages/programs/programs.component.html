@@ -29,9 +29,8 @@
   </button>
 </div>
 
-
 <!-- affichage des programmes -->
- @if (programs().length > 0) {
+@if (programs().length > 0) {
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @for (p of programs(); track p.id) {
       <nz-card [nzActions]="[actionEdit, actionDelete]" [nzHoverable]="true">
@@ -45,17 +44,32 @@
       </ng-template>
 
       <ng-template #descriptionTemplate>
-        <div class="min-h-[20px] text-gray-500 text-sm line-clamp-2">
-          @if (p.description) {
-            <nz-tag nzColor="blue" >{{ p.description }}</nz-tag>
-          }
-          departmet: {{ p.department.name }}
+        <div class="flex flex-col gap-2">
+          <div class="flex gap-2">
+            Desc :
+            <nz-tag
+              [nzColor]="'green'"
+              class="m-0 px-2 py-0.5   "
+            >
+              {{ p.description || 'Aucune description' }}
+            </nz-tag>
+          </div>
+
+          <div class="flex gap-2">
+            Dept :
+            <nz-tag
+              [nzColor]="'blue'"
+              class="m-0 px-2 py-0.5  "
+            >
+              {{ p.department.name }}
+            </nz-tag>
+          </div>
         </div>
       </ng-template>
 
       <ng-template #actionEdit>
         <button
-        (click)="showEditModal(p)"
+          (click)="showEditModal(p)"
           class="cursor-pointer"
           nz-tooltip
           nzTooltipTitle="Modifier programme"
@@ -65,7 +79,7 @@
       </ng-template>
       <ng-template #actionDelete>
         <button
-        (click)="deleteProgram(p.id)"
+          (click)="deleteProgram(p.id)"
           class="cursor-pointer"
           nz-tooltip
           nzTooltipTitle="Supprimer programme"
