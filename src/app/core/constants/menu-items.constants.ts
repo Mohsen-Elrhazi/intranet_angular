@@ -107,6 +107,12 @@ export const MENU_ITEMS: MenuItem[] = [
     route: '/admin/filieres',
     roles: ['ADMIN'],
   },
+    {
+    label: 'matieres',
+    icon: 'file',
+    route: '/admin/matieres',
+    roles: ['ADMIN'],
+  },
   // --- TEACHER ---
 
   {

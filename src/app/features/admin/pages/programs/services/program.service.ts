@@ -39,4 +39,8 @@ export class ProgramService {
   updateProgram(id: number, request: UpdateProgramRequest): Observable<ApiResponse<ProgramResponse>> {
     return this.http.patch<ApiResponse<ProgramResponse>>(`${this.baseUrl}/${id}`, request);
   }
+
+  getAllProgramList(): Observable<ApiResponse<ProgramResponse[]>> {
+    return this.http.get<ApiResponse<ProgramResponse[]>>(`${this.baseUrl}/list`);
+  }
 }

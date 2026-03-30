@@ -1,0 +1,71 @@
+<div
+  class="flex items-center justify-between gap-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
+>
+<div></div>
+  <button nz-button nzType="primary" (click)="showCreateModal()">
+    <nz-icon nzType="plus-circle" nzTheme="outline" />
+    <span>Ajouter</span>
+  </button>
+</div>
+
+<!-- affichage des programmes -->
+@if (subjects().length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (subject of subjects(); track subject.id) {
+      <nz-card [nzActions]="[actionEdit, actionDelete]" [nzHoverable]="true">
+        <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
+      </nz-card>
+
+      <ng-template #titleTemplate>
+        <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
+          {{ subject.name }}
+        </div>
+      </ng-template>
+
+      <ng-template #descriptionTemplate>
+        <div class="flex flex-col gap-2">
+          
+
+          <div class="flex gap-2">
+            filiere :
+            <nz-tag
+              [nzColor]="'blue'"
+              class="m-0 px-2 py-0.5  "
+            >
+              {{ subject.program.name }}
+            </nz-tag>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #actionEdit>
+        <button
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Modifier matière"
+        >
+          <nz-icon nzType="edit" />
+        </button>
+      </ng-template>
+      <ng-template #actionDelete>
+        <button
+        (click)="deleteSubject(subject.id)"
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Supprimer matière"
+        >
+          <nz-icon nzType="delete" />
+        </button>
+      </ng-template>
+    }
+  </div>
+
+  
+} @else {
+  <div class="mt-22">
+    <nz-empty />
+  </div>
+}
+
+
+

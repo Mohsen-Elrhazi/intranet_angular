@@ -1,0 +1,53 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
+  <div class="px-6 py-2">
+    <nz-form-item>
+      <nz-form-label nzRequired>Nom du matière</nz-form-label>
+
+      <nz-form-control nzHasFeedback [nzErrorTip]="nameErrorTpl">
+        <input nz-input formControlName="name" placeholder="Entrez le nom" />
+
+        <ng-template #nameErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Le nom du département est obligatoire !
+          }
+
+          @if (control.hasError('backendError')) {
+            {{ control.getError('backendError') }}
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+   
+    <nz-form-item>
+      <nz-form-label nzRequired>Filiere</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="deptErrorTpl">
+        <nz-select
+          formControlName="programId"
+          nzAllowClear
+          nzPlaceHolder="Sélectionnez une filiere"
+        >
+          @for (program of programList(); track program.id) {
+            <nz-option [nzValue]="program.id" [nzLabel]="program.name"></nz-option>
+          }
+        </nz-select>
+
+        <ng-template #deptErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez choisir une filiere !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="h-[1px] bg-gray-200"></div>
+
+  <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
+
+    <button [nzLoading]="isLoading()" nz-button nzType="primary" type="submit">
+        Ajouter
+    </button>
+  </div>
+</form>

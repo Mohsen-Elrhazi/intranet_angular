@@ -7,6 +7,7 @@ import { Routes } from '@angular/router';
 import { ActiveStudentsComponent } from './pages/students/pages/active-students/active-students.component';
 import { DeletedStudentsComponent } from './pages/students/pages/deleted-students/deleted-students.component';
 import { ProgramsComponent } from './pages/programs/programs.component';
+import { SubjectsComponent } from './pages/subjects/subjects.component';
 
 export const adminRoutes: Routes = [
   {
@@ -52,5 +53,9 @@ export const adminRoutes: Routes = [
   {
     path: 'filieres',
     component: ProgramsComponent,
+  },
+  {
+    path: 'matieres',
+    component: SubjectsComponent,
   },
 ];
