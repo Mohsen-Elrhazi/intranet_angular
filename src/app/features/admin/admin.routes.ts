@@ -8,6 +8,7 @@ import { ActiveStudentsComponent } from './pages/students/pages/active-students/
 import { DeletedStudentsComponent } from './pages/students/pages/deleted-students/deleted-students.component';
 import { ProgramsComponent } from './pages/programs/programs.component';
 import { SubjectsComponent } from './pages/subjects/subjects.component';
+import { ClassroomsComponent } from './pages/classrooms/classrooms.component';
 
 export const adminRoutes: Routes = [
   {
@@ -57,5 +58,9 @@ export const adminRoutes: Routes = [
   {
     path: 'matieres',
     component: SubjectsComponent,
+  },
+  {
+    path: 'classrooms',
+    component: ClassroomsComponent,
   },
 ];

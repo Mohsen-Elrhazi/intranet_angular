@@ -1,0 +1,157 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
+  <div class="px-6 py-2">
+    <nz-form-item>
+      <nz-form-label nzRequired>Nom du classe</nz-form-label>
+
+      <nz-form-control nzHasFeedback [nzErrorTip]="nameErrorTpl">
+        <input nz-input formControlName="name" placeholder="Entrez le nom" />
+
+        <ng-template #nameErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Le nom du département est obligatoire !
+          }
+
+          @if (control.hasError('backendError')) {
+            {{ control.getError('backendError') }}
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Promotion</nz-form-label>
+
+      <nz-form-control nzHasFeedback [nzErrorTip]="promotionErrorTpl">
+        <input nz-input formControlName="promotion" placeholder="Entrez la promotion" />
+
+        <ng-template #promotionErrorTpl let-control>
+          @if (control.hasError('required')) {
+            La promotion est obligatoire !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- level -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Niveau</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="levelErrorTpl">
+        <nz-select formControlName="level" nzAllowClear nzPlaceHolder="Sélectionnez le niveau">
+          @for (level of levelOptions; track level.value) {
+            <nz-option [nzValue]="level.value" [nzLabel]="level.label"></nz-option>
+          }
+        </nz-select>
+
+        <ng-template #levelErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez choisir un niveau !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Programme</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="programErrorTpl">
+        <nz-select
+          formControlName="programId"
+          nzAllowClear
+          nzPlaceHolder="Sélectionnez un programme"
+        >
+          @for (program of programList(); track program.id) {
+            <nz-option [nzValue]="program.id" [nzLabel]="program.name"></nz-option>
+          }
+        </nz-select>
+
+        <ng-template #programErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez choisir un programme !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- etudiants -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Étudiants</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="studentErrorTpl">
+        <nz-select
+          formControlName="studentIds"
+          nzMode="multiple"
+          nzAllowClear
+          nzPlaceHolder="Sélectionnez des étudiants"
+        >
+          @for (student of studentList(); track student.id) {
+            <nz-option
+              nzCustomContent
+              [nzValue]="student.id"
+              [nzLabel]="student.firstName + ' ' + student.lastName"
+            >
+              <div class="student-option">
+                <nz-avatar
+                  nzSize="small"
+                  [nzSrc]="student.profileImageUrl"
+                  [nzText]="student.firstName[0]"
+                  style="margin-right: 8px"
+                >
+                </nz-avatar>
+                <span>{{ student.firstName }} {{ student.lastName }}</span>
+              </div>
+            </nz-option>
+          }
+        </nz-select>
+
+        <ng-template #studentErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez choisir des étudiants !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- enseignants -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Enseignant</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="teacherErrorTpl">
+        <nz-select
+          formControlName="teacherIds"
+          nzMode="multiple"
+          nzAllowClear
+          nzPlaceHolder="Sélectionnez un enseignant"
+        >
+          @for (teacher of teacherList(); track teacher.id) {
+            <nz-option
+              nzCustomContent
+              [nzValue]="teacher.id"
+              [nzLabel]="teacher.firstName + ' ' + teacher.lastName"
+              ><div class="teacher-option">
+                <nz-avatar
+                  nzSize="small"
+                  [nzSrc]="teacher.profileImageUrl"
+                  [nzText]="teacher.firstName[0]"
+                  style="margin-right: 8px"
+                >
+                </nz-avatar>
+                <span>{{ teacher.firstName }} {{ teacher.lastName }}</span>
+              </div>
+            </nz-option>
+          }
+        </nz-select>
+
+        <ng-template #teacherErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez choisir un enseignant !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="h-[1px] bg-gray-200"></div>
+
+  <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
+
+    <button [nzLoading]="isLoading()" nz-button nzType="primary" type="submit">Ajouter</button>
+  </div>
+</form>

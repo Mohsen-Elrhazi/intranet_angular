@@ -62,4 +62,8 @@ export class TeacherService {
   restoreTeacher(id: number): Observable<ApiResponse<void>> {
     return this.http.patch<ApiResponse<void>>(`${this.baseUrl}/${id}/restore`, {});
   }
+
+  getAllTeacherList(): Observable<ApiResponse<TeacherResponse[]>> {
+    return this.http.get<ApiResponse<TeacherResponse[]>>(`${this.baseUrl}/active`);
+  }
 }

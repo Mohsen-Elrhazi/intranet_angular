@@ -101,16 +101,22 @@ export const MENU_ITEMS: MenuItem[] = [
     route: '/admin/departements',
     roles: ['ADMIN'],
   },
-    {
-    label: 'filieres',
+  {
+    label: 'Filières',
     icon: 'file',
     route: '/admin/filieres',
     roles: ['ADMIN'],
   },
-    {
-    label: 'matieres',
+  {
+    label: 'Matieres',
     icon: 'file',
     route: '/admin/matieres',
+    roles: ['ADMIN'],
+  },
+  {
+    label: 'Classrooms',
+    icon: 'file',
+    route: '/admin/classrooms',
     roles: ['ADMIN'],
   },
   // --- TEACHER ---

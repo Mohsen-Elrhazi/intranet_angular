@@ -57,4 +57,8 @@ export class StudentService {
     if (cne) params = params.set('cne', cne);
     return this.http.get<ApiResponse<PageResponse<StudentResponse>>>(`${this.baseUrl}/deleted`, { params });
   }
+
+  getAllStudentList(): Observable<ApiResponse<StudentResponse[]>> {
+    return this.http.get<ApiResponse<StudentResponse[]>>(`${this.baseUrl}/active`);
+  }
 }
