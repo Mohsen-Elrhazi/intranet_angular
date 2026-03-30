@@ -9,6 +9,8 @@ import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload';
 import { StudentService } from '../../services/student.service';
 import { CreateStudentRequest } from '../../models/create-student-request.model';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 @Component({
   selector: 'app-student-form',
@@ -19,6 +21,8 @@ import { CreateStudentRequest } from '../../models/create-student-request.model'
     NzIconModule,
     NzInputModule,
     NzUploadModule,
+    NzSelectModule,
+    NzDatePickerModule,
   ],
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css',
@@ -35,6 +39,16 @@ export class StudentFormComponent {
   readonly nzModalData = inject(NZ_MODAL_DATA);
   isEditMode = false;
   studentId?: number;
+
+  genderOptions = [
+    { label: 'Masculin', value: 'MALE' },
+    { label: 'Féminin', value: 'FEMALE' },
+  ];
+
+  levelOptions = [
+    { label: 'A1', value: 'A1' },
+    { label: 'A2', value: 'A2' },
+  ];
 
   ngOnInit() {
     this.isEditMode = !!this.nzModalData?.student;
@@ -53,10 +67,17 @@ export class StudentFormComponent {
     this.validateForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', this.isEditMode ? [] : [Validators.required, Validators.email]],
-      password: ['', this.isEditMode ? [] : [Validators.required, Validators.minLength(8)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('^[+]?[0-9 ]*$')]],
       cne: ['', [Validators.required]],
+
+      gender: [null, [Validators.required]], //null pour les enums
+      level: [null, [Validators.required]],
+      city: ['', [Validators.required]],
+      cin: ['', [Validators.required]],
+      promotion: [null, [Validators.required]],
+      birthDate: [null, [Validators.required]],
     });
 
     if (this.isEditMode) {
@@ -73,6 +94,12 @@ export class StudentFormComponent {
       email: s.email,
       phoneNumber: s.phoneNumber,
       cne: s.cne,
+      gender: s.gender,
+      level: s.level,
+      city: s.city,
+      cin: s.cin,
+      promotion: s.promotion,
+      birthDate: s.birthDate,
     });
 
     if (s.profileImageUrl) {
@@ -134,6 +161,17 @@ export class StudentFormComponent {
 
     formData.append('phoneNumber', values.phoneNumber);
     formData.append('cne', values.cne);
+
+    formData.append('gender', values.gender);
+    formData.append('level', values.level);
+    formData.append('city', values.city);
+    formData.append('cin', values.cin);
+    formData.append('promotion', values.promotion.toString());
+
+    if (values.birthDate instanceof Date) {
+     const birthDateStr = values.birthDate.toISOString().split('T')[0];
+     formData.append('birthDate', birthDateStr);
+    }
 
     if (!this.isEditMode) {
       formData.append('email', values.email);

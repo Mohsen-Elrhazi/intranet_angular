@@ -8,6 +8,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  if (req.url.includes('/api/auth/')) {
+    return next(req);
+  }
+  
   const token = localStorage.getItem('accessToken');
 
   // if (token) {

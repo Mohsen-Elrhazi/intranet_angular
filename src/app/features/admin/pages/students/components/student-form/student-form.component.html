@@ -146,7 +146,116 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <!--  -->
+
+    <div class="grid grid-cols-2 gap-4">
+      <nz-form-item>
+        <nz-form-label nzRequired>Genre</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="genderErrorTpl">
+          <nz-select formControlName="gender" nzAllowClear nzPlaceHolder="Sélectionnez le genre">
+            @for (gender of genderOptions; track gender.value) {
+              <nz-option [nzValue]="gender.value" [nzLabel]="gender.label"></nz-option>
+            }
+          </nz-select>
+
+          <ng-template #genderErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Veuillez choisir un genre !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- level -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Niveau</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="levelErrorTpl">
+          <nz-select formControlName="level" nzAllowClear nzPlaceHolder="Sélectionnez le niveau">
+            @for (level of levelOptions; track level.value) {
+              <nz-option [nzValue]="level.value" [nzLabel]="level.label"></nz-option>
+            }
+          </nz-select>
+
+          <ng-template #levelErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Veuillez choisir un niveau !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <nz-form-item>
+        <nz-form-label nzFor="city" nzRequired>Ville</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="cityErrorTpl">
+          <input nz-input formControlName="city" id="city" placeholder="Entrez la ville" />
+          <ng-template #cityErrorTpl let-control>
+            @if (control.hasError('required')) {
+              La ville est obligatoire !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="cin" nzRequired>CIN</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="cinErrorTpl">
+          <input
+            nz-input
+            nzSize="default"
+            formControlName="cin"
+            id="cin"
+            placeholder="CIN de l'étudiant"
+          />
+          <ng-template #cinErrorTpl let-control>
+            @if (control.hasError('required')) {
+              Le CIN est obligatoire !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <nz-form-item>
+        <nz-form-label nzFor="promotion" nzRequired>Promotion</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="promotionErrorTpl">
+          <input
+            nz-input
+            formControlName="promotion"
+            id="promotion"
+            placeholder="Entrez la promotion"
+          />
+          <ng-template #promotionErrorTpl let-control>
+            @if (control.hasError('required')) {
+              La promotion est obligatoire !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="birthDate" nzRequired>Date de Naissance</nz-form-label>
+        <nz-form-control nzHasFeedback [nzErrorTip]="birthDateErrorTpl">
+          <nz-date-picker
+            formControlName="birthDate"
+            id="birthDate"
+            nzPlaceHolder="Sélectionner la date de naissance"
+            nzFormat="dd/MM/yyyy"
+            class="w-full"
+          ></nz-date-picker>
+
+          <ng-template #birthDateErrorTpl let-control>
+            @if (control.hasError('required')) {
+              La date de naissance est obligatoire !
+            }
+            @if (control.hasError('notInPast')) {
+              La date doit être dans le passé !
+            }
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
   </div>
 
   <div class="h-[1px] bg-gray-200"></div>

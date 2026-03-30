@@ -45,7 +45,7 @@
     <nz-spin nzSize="large"></nz-spin>
   </div>
 } @else -->
- @if (students().length > 0) {
+@if (students().length > 0) {
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @for (s of students(); track s.id) {
       <nz-ribbon nzText="S" nzColor="red">
@@ -150,7 +150,9 @@
     ></nz-pagination>
   </div>
 } @else {
-  <nz-empty />
+  <div class="mt-22">
+    <nz-empty />
+  </div>
 }
 
 <ng-template #totalTemplate let-total>
