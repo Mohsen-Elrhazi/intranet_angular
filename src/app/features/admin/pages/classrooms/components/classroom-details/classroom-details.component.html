@@ -1,1 +1,91 @@
-{{classroom.name}}
+<div class="p-5">
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">{{ classroom.name }}</h2>
+      <p class="text-gray-500">Promotion {{ classroom.promotion }}</p>
+    </div>
+    <nz-tag nzColor="blue" class="font-semibold">{{ classroom.level }}</nz-tag>
+  </div>
+
+  <nz-tabs nzCentered>
+    <nz-tab nzTitle="Détails">
+      <div class="py-4">
+        <nz-descriptions [nzColumn]="1" nzBordered nzSize="small">
+          <nz-descriptions-item nzTitle="Programme">{{
+            classroom.program.name
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Département">{{
+            classroom.program.department.name
+          }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Promotion">{{ classroom.promotion }}</nz-descriptions-item>
+          <nz-descriptions-item nzTitle="Niveau">{{ classroom.level }}</nz-descriptions-item>
+        </nz-descriptions>
+      </div>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Enseignants (' + (classroom.teachers?.length || 0) + ')'">
+      <nz-list class="demo-loadmore-list">
+        @for (teacher of classroom.teachers; track teacher.id) {
+          <nz-list-item>
+            <nz-list-item-meta [nzDescription]="teacher.email">
+              <nz-list-item-meta-avatar>
+                @if (teacher.profileImageUrl) {
+                  <nz-avatar
+                    [nzSrc]="teacher.profileImageUrl"
+                    [nzAlt]="teacher.firstName"
+                    nzSize="large"
+                  ></nz-avatar>
+                } @else {
+                  <nz-avatar
+                    [nzText]="teacher.firstName.charAt(0) + teacher.lastName.charAt(0) | uppercase"
+                    nzSize="large"
+                    class="bg-blue-100 text-blue-600"
+                  >
+                  </nz-avatar>
+                }
+              </nz-list-item-meta-avatar>
+
+              <nz-list-item-meta-title>
+                <a class="font-semibold text-blue-600"
+                  >{{ teacher.firstName }} {{ teacher.lastName }}</a
+                >
+              </nz-list-item-meta-title>
+            </nz-list-item-meta>
+          </nz-list-item>
+        } @empty {
+          <p class="text-center text-gray-400 py-4 italic">Aucun enseignant assigné.</p>
+        }
+      </nz-list>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Étudiants (' + (classroom.students?.length || 0) + ')'">
+      <nz-list class="demo-loadmore-list">
+    @for (student of classroom.students; track student.id) {
+      <nz-list-item>
+        <nz-list-item-meta [nzDescription]="student.email">
+          
+          <nz-list-item-meta-avatar>
+            @if (student.profileImageUrl) {
+              <nz-avatar [nzSrc]="student.profileImageUrl" [nzAlt]="student.firstName" nzSize="large"></nz-avatar>
+            } @else {
+              <nz-avatar 
+                [nzText]="(student.firstName.charAt(0) + student.lastName.charAt(0)) | uppercase" 
+                nzSize="large"
+                class="bg-blue-100 text-blue-600">
+              </nz-avatar>
+            }
+          </nz-list-item-meta-avatar>
+
+          <nz-list-item-meta-title>
+            <a class="font-semibold text-blue-600">{{ student.firstName }} {{ student.lastName }}</a>
+          </nz-list-item-meta-title>
+
+        </nz-list-item-meta>
+      </nz-list-item>
+    } @empty {
+      <p class="text-center text-gray-400 py-4 italic">Aucun étudiant assigné.</p>
+    }
+  </nz-list>
+    </nz-tab>
+  </nz-tabs>
+</div>
