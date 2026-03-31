@@ -51,7 +51,7 @@
         <div class="flex flex-col gap-2 mt-2">
           <div class="flex justify-between items-center w-full">
             <span class="text-gray-500 text-sm">Filière :</span>
-            <nz-tag nzColor="blue" class="m-0 px-2 py-0.5 ">
+            <nz-tag nzColor="blue" class="m-0 px-2 py-0.5">
               {{ classroom.program.name }}
             </nz-tag>
           </div>
@@ -77,20 +77,19 @@
             </nz-tag>
           </div>
 
-           <div class="flex justify-between items-center w-full">
+          <div class="flex justify-between items-center w-full">
             <span class="text-gray-500 text-sm">Etudiants :</span>
             <nz-tag nzColor="blue">
               {{ classroom.students?.length }}
             </nz-tag>
           </div>
 
-            <div class="flex justify-between items-center w-full">
+          <div class="flex justify-between items-center w-full">
             <span class="text-gray-500 text-sm">Enseignants :</span>
             <nz-tag nzColor="blue">
               {{ classroom.teachers?.length }}
             </nz-tag>
           </div>
-
         </div>
       </ng-template>
 
@@ -100,7 +99,7 @@
         </button>
       </ng-template>
       <ng-template #actionDelete>
-        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Supprimer matière">
+        <button (click)="deleteClassroom(classroom.id)" class="cursor-pointer" nz-tooltip nzTooltipTitle="Supprimer matière">
           <nz-icon nzType="delete" />
         </button>
       </ng-template>

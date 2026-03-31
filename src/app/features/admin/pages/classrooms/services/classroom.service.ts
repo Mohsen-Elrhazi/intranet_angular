@@ -30,4 +30,8 @@ export class ClassroomService {
     }
     return this.http.get<ApiResponse<PageResponse<ClassroomResponse>>>(this.baseUrl, { params });
   }
+
+  deleteClassroom(id: number): Observable<ApiResponse<void>> {
+    return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
+  }
 }

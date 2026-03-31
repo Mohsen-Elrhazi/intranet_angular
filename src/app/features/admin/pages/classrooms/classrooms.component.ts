@@ -114,4 +114,25 @@ export class ClassroomsComponent {
       }
     });
   }
+
+  deleteClassroom(classroomId: number): void {
+     this.modalService.confirm({
+      nzTitle: 'voulez vous supprimer cette classe?',
+      nzOkText: 'Oui',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.classroomService.deleteClassroom(classroomId).subscribe({
+          next: (response) => {
+            this.messageService.success(response.message);
+            this.loadClassrooms();
+          },
+          error: (err) => {
+            this.messageService.error('erreur lors de suppression');
+          },
+        }),
+      nzCancelText: 'Non',
+      nzOnCancel: () => this.messageService.info('Cancel'),
+    });
+  }
 }
