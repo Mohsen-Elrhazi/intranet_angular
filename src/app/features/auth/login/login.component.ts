@@ -12,6 +12,8 @@ import { LoginRequest } from '../../../core/models/login-request.model';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { Router } from '@angular/router';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,7 @@ import { Router } from '@angular/router';
     NzIconModule,
     NzCardModule,
     NzDividerModule,
+    NzAvatarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
