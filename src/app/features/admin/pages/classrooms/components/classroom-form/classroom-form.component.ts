@@ -15,6 +15,7 @@ import { TeacherResponse } from '../../../teachers/models/teacher-response.model
 import { ProgramResponse } from '../../../programs/models/program-response.model';
 import { ClassroomService } from '../../services/classroom.service';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { Level } from '../../../../../../core/enums/level.enum';
 
 @Component({
   selector: 'app-classroom-form',
@@ -44,10 +45,7 @@ export class ClassroomFormComponent implements OnInit {
   validateForm!: FormGroup;
   isLoading = signal(false);
 
-  levelOptions = [
-    { label: 'A1', value: 'A1' },
-    { label: 'A2', value: 'A2' },
-  ];
+  levels = Object.values(Level);
 
   ngOnInit(): void {
     this.loadStudentList();

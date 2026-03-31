@@ -3,4 +3,6 @@ export interface CreateClassroomRequest {
     level: string;
     promotion: string;
     programId: number;
+    studentIds: number[];
+    teacherIds: number[];
 }

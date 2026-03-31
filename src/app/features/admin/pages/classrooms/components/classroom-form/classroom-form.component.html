@@ -37,8 +37,8 @@
       <nz-form-label nzRequired>Niveau</nz-form-label>
       <nz-form-control nzHasFeedback [nzErrorTip]="levelErrorTpl">
         <nz-select formControlName="level" nzAllowClear nzPlaceHolder="Sélectionnez le niveau">
-          @for (level of levelOptions; track level.value) {
-            <nz-option [nzValue]="level.value" [nzLabel]="level.label"></nz-option>
+          @for (level of levels; track level) {
+            <nz-option [nzValue]="level" [nzLabel]="level"></nz-option>
           }
         </nz-select>
 

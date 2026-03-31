@@ -1,9 +1,131 @@
 <div
   class="flex items-center justify-between gap-4 mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200"
 >
-<div></div>
+  <div class="flex items-center gap-3 flex-nowrap">
+    <!-- search -->
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="!w-60">
+      <input
+        type="text"
+        nz-input
+        placeholder="Nom du filiere..."
+        [(ngModel)]="name"
+        (ngModelChange)="onSearch()"
+        class="rounded-md"
+      />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <span nz-icon nzType="search" class="text-gray-400"></span>
+    </ng-template>
+
+    <button nz-button (click)="resetFilters()">
+      <nz-icon nzType="reload" nzTheme="outline" />
+      <span>Réinitialiser</span>
+    </button>
+  </div>
+
   <button nz-button nzType="primary" (click)="showCreateModal()">
     <nz-icon nzType="plus-circle" nzTheme="outline" />
     <span>Ajouter</span>
   </button>
 </div>
+
+<!-- affichage des classes -->
+@if (classrooms().length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (classroom of classrooms(); track classroom.id) {
+      <nz-ribbon [nzText]="classroom.level" nzColor="green">
+        <nz-card [nzActions]="[actionEdit, actionDelete]" [nzHoverable]="true">
+          <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
+        </nz-card>
+      </nz-ribbon>
+
+      <ng-template #titleTemplate>
+        <div
+          class="text-[16px] font-semibold text-gray-900 mb-0.5 mt-2 overflow-hidden whitespace-nowrap text-ellipsis"
+        >
+          {{ classroom.name }}
+        </div>
+      </ng-template>
+
+      <ng-template #descriptionTemplate>
+        <div class="flex flex-col gap-2 mt-2">
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Filière :</span>
+            <nz-tag nzColor="blue" class="m-0 px-2 py-0.5 ">
+              {{ classroom.program.name }}
+            </nz-tag>
+          </div>
+
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Département :</span>
+            <nz-tag nzColor="blue">
+              {{ classroom.program.department.name }}
+            </nz-tag>
+          </div>
+
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Promotion :</span>
+            <nz-tag nzColor="blue">
+              {{ classroom.promotion }}
+            </nz-tag>
+          </div>
+
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Niveau :</span>
+            <nz-tag nzColor="blue">
+              {{ classroom.level }}
+            </nz-tag>
+          </div>
+
+           <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Etudiants :</span>
+            <nz-tag nzColor="blue">
+              {{ classroom.students?.length }}
+            </nz-tag>
+          </div>
+
+            <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm">Enseignants :</span>
+            <nz-tag nzColor="blue">
+              {{ classroom.teachers?.length }}
+            </nz-tag>
+          </div>
+
+        </div>
+      </ng-template>
+
+      <ng-template #actionEdit>
+        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Modifier matière">
+          <nz-icon nzType="edit" />
+        </button>
+      </ng-template>
+      <ng-template #actionDelete>
+        <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Supprimer matière">
+          <nz-icon nzType="delete" />
+        </button>
+      </ng-template>
+    }
+  </div>
+
+  <!-- pagination -->
+  <div class="flex justify-end mt-8 p-4">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzTotal]="totalElements()"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[8, 12, 24, 48]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      [nzShowTotal]="totalTemplate"
+    ></nz-pagination>
+  </div>
+} @else {
+  <div class="mt-22">
+    <nz-empty />
+  </div>
+}
+
+<ng-template #totalTemplate let-total>
+  <span class=" ">Total : {{ total }} classes</span>
+</ng-template>
