@@ -54,10 +54,14 @@
       </ng-template>
 
       <ng-template #descriptionTemplate>
-        <div class="min-h-[20px] text-gray-500 text-sm line-clamp-2">
-          @if (d.description) {
-            <nz-tag nzColor="blue" >{{ d.description }}</nz-tag>
-          }
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center gap-4 w-full">
+            <span class="text-gray-500 text-sm whitespace-nowrap">Desc :</span>
+
+            <nz-tag nzColor="blue" class="max-w-[200px] truncate m-0" [title]="d.description">
+              {{ d.description || 'Aucune description' }}
+            </nz-tag>
+          </div>
         </div>
       </ng-template>
 

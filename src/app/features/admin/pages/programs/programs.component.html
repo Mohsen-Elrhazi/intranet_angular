@@ -45,22 +45,16 @@
 
       <ng-template #descriptionTemplate>
         <div class="flex flex-col gap-2">
-          <div class="flex gap-2">
-            Desc :
-            <nz-tag
-              [nzColor]="'green'"
-              class="m-0 px-2 py-0.5   "
-            >
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm"> Desc :</span>
+            <nz-tag nzColor="blue">
               {{ p.description || 'Aucune description' }}
             </nz-tag>
           </div>
 
-          <div class="flex gap-2">
-            Dept :
-            <nz-tag
-              [nzColor]="'blue'"
-              class="m-0 px-2 py-0.5  "
-            >
+          <div class="flex justify-between items-center w-full">
+            <span class="text-gray-500 text-sm"> Dept :</span>
+            <nz-tag nzColor="blue">
               {{ p.department.name }}
             </nz-tag>
           </div>
