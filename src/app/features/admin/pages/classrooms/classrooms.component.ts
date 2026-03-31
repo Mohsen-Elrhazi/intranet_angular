@@ -20,6 +20,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ClassroomResponse } from './models/classroom-response.model';
 import { ClassroomService } from './services/classroom.service';
+import { ClassroomDetailsComponent } from './components/classroom-details/classroom-details.component';
 
 @Component({
   selector: 'app-classrooms',
@@ -49,6 +50,8 @@ import { ClassroomService } from './services/classroom.service';
 export class ClassroomsComponent {
   private modalService = inject(NzModalService);
   private messageService = inject(NzMessageService);
+    private drawerService = inject(NzDrawerService);
+
 
   private classroomService = inject(ClassroomService);
 
@@ -134,5 +137,15 @@ export class ClassroomsComponent {
       nzCancelText: 'Non',
       nzOnCancel: () => this.messageService.info('Cancel'),
     });
+  }
+
+  viewDetails(classroom: ClassroomResponse){
+     const drawer = this.drawerService.create({
+          nzTitle: "Détails de la class",
+          nzContent: ClassroomDetailsComponent,
+          nzWidth: 600,
+          nzBodyStyle: { padding: '0' },
+          nzData: { classroom : classroom },
+        });
   }
 }
