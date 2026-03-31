@@ -13,6 +13,7 @@ import { NzDropdownModule } from 'ng-zorro-antd/dropdown';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { UserResponse } from '../../core/models/user-response.model';
 
 @Component({
   selector: 'app-main-layout',
@@ -69,4 +70,18 @@ export class MainLayoutComponent {
       nzOnCancel: () => this.message.info('Cancel'),
     });
   }
+
+  user = signal<UserResponse | null>(null);
+  ngOnInit() {
+    this.authService.getAuthenticateUser().subscribe({
+      next: (response) => {
+        this.user.set(response.data);
+        console.log('Authenticated user data:', response.data);
+      },
+      error: (err) => {
+        console.error('Failed to fetch user data:', err);
+      },
+    });
+  }
+        
 }

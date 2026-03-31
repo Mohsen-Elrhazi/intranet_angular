@@ -34,4 +34,12 @@ export class ClassroomService {
   deleteClassroom(id: number): Observable<ApiResponse<void>> {
     return this.http.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
   }
+
+  getTeacherClassrooms(): Observable<ApiResponse<ClassroomResponse[]>> {
+    return this.http.get<ApiResponse<ClassroomResponse[]>>(`${this.baseUrl}/teacher/my-classrooms`);
+  }
+
+  getStudentClassrooms(): Observable<ApiResponse<ClassroomResponse[]>> {
+    return this.http.get<ApiResponse<ClassroomResponse[]>>(`${this.baseUrl}/student/my-classrooms`);
+  }
 }

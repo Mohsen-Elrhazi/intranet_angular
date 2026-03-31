@@ -40,9 +40,9 @@
               <nz-avatar nzSize="large" nzIcon="user" />
               <div class="flex flex-col flex-1 overflow-hidden">
                 <div class="flex items-center justify-between">
-                  <span class="font-bold text-gray-900 truncate text-sm">Bonnie Green</span>
+                  <span class="font-bold text-gray-900 truncate text-sm">{{ user()?.firstName }} {{ user()?.lastName }}</span>
                 </div>
-                <span class="text-sm text-gray-600 truncate">tet@gmail.com</span>
+                <span class="text-sm text-gray-600 truncate">{{ user()?.email }}</span>
               </div>
             </div>
 

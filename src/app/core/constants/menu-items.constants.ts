@@ -109,13 +109,13 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     label: 'Matieres',
-    icon: 'file',
+    icon: 'book',
     route: '/admin/matieres',
     roles: ['ADMIN'],
   },
   {
     label: 'Classrooms',
-    icon: 'file',
+    icon: 'home',
     route: '/admin/classrooms',
     roles: ['ADMIN'],
   },
@@ -127,4 +127,20 @@ export const MENU_ITEMS: MenuItem[] = [
     route: '/teacher/courses',
     roles: ['TEACHER'],
   },
+  {
+    label: 'Classrooms',
+    icon: 'home',
+    route: '/teacher/classrooms',
+    roles: ['TEACHER'],
+  },
+
+
+  // --- STUDENT ---
+  {
+    label: 'classrooms',
+    icon: 'book',
+    route: '/student/classrooms',
+    roles: ['STUDENT'],
+  },
+
 ];

@@ -63,10 +63,10 @@ export class LoginComponent {
               this.router.navigate(['/admin/enseignants/actifs']);
               break;
             case 'TEACHER':
-              this.router.navigate(['/teacher/courses']);
+              this.router.navigate(['/teacher/classrooms']);
               break;
             case 'STUDENT':
-              this.router.navigate(['/student/courses']);
+              this.router.navigate(['/student/classrooms']);
               break;
             default:
               this.router.navigate(['/login']);

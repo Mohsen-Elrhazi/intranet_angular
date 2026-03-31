@@ -7,6 +7,7 @@ import { ApiResponse } from '../models/api-response.model';
 import { AuthResponse } from '../models/auth-response.model';
 import { jwtDecode } from 'jwt-decode';
 import { CustomJwtPayload } from '../models/custom-jwt-payload.model';
+import { UserResponse } from '../models/user-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +71,9 @@ export class AuthService {
         this.saveTokens(response.data.accessToken, response.data.refreshToken);
       })
     );
+  }
+
+  getAuthenticateUser(): Observable<ApiResponse<UserResponse>> {
+    return this.http.get<ApiResponse<UserResponse>>(`${this.baseUrl}/me`);
   }
 }
