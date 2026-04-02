@@ -1,1 +1,70 @@
-<p>courses works!</p>
+
+
+<!-- @if (loading()) {
+  <div class="p-10 flex justify-center items-center h-full">
+    <nz-spin nzSize="large"></nz-spin>
+  </div>
+} @else  -->
+@if (courses().length > 0) {
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (course of courses(); track course.id) {
+      <nz-card [nzActions]="[actionEdit, actionDetails]" [nzHoverable]="true">
+        <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
+      </nz-card>
+
+      <ng-template #titleTemplate>
+        <div class="text-[16px] font-semibold text-gray-900 mb-0.5">
+          {{ course.title }}
+        </div>
+      </ng-template>
+
+      <ng-template #descriptionTemplate>
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center gap-4 w-full">
+            <span class="text-gray-500 text-sm whitespace-nowrap">Desc :</span>
+
+            <nz-tag nzColor="blue" class="max-w-[200px] truncate m-0" [title]="course.description">
+              {{ course.description || 'Aucune description' }}
+            </nz-tag>
+          </div>
+
+          <div class="flex justify-between items-center gap-4 w-full">
+            <span class="text-gray-500 text-sm whitespace-nowrap">Classe :</span>
+
+            <nz-tag nzColor="blue" class="max-w-[200px] truncate m-0" [title]="course.classroom.name">
+              {{ course.classroom.name }}
+            </nz-tag>
+          </div>
+
+        </div>
+      </ng-template>
+
+      <ng-template #actionEdit>
+        <button
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Modifier cours"
+        >
+          <nz-icon nzType="edit" />
+        </button>
+      </ng-template>
+      <ng-template #actionDetails>
+        <button
+        (click)="viewDetails(course)"
+          class="cursor-pointer"
+          nz-tooltip
+          nzTooltipTitle="Détails cours"
+        >
+          <nz-icon nzType="profile" />
+        </button>
+      </ng-template>
+    }
+  </div>
+
+} @else {
+  <div class="mt-22">
+    <nz-empty />
+  </div>
+}
+
+

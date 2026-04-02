@@ -1,0 +1,59 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="envoyer()" nzLayout="vertical">
+  <div class="px-6 py-2">
+    <nz-form-item>
+      <nz-form-label nzRequired>Titre du cours</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="titleErrorTpl">
+        <input
+          nz-input
+          formControlName="title"
+          placeholder="Entrez le titre (ex: Introduction au Java)"
+        />
+        <ng-template #titleErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Le titre est obligatoire !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Description</nz-form-label>
+      <nz-form-control nzHasFeedback>
+        <textarea
+          nz-input
+          formControlName="description"
+          placeholder="Entrez la description du cours"
+          [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Fichier du cours (PDF, Doc, etc.)</nz-form-label>
+      <nz-form-control nzHasFeedback [nzErrorTip]="fileErrorTpl">
+        <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.ppt,.pptx" />
+
+        <ng-template #fileErrorTpl let-control>
+          @if (control.hasError('required')) {
+            Veuillez sélectionner un fichier !
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <div class="h-[1px] bg-gray-200"></div>
+
+  <div class="flex justify-end gap-2 py-[10px] px-4 bg-white rounded-b-lg">
+    <button nz-button nzType="default" type="button" (click)="close()">Annuler</button>
+    <button
+      [nzLoading]="isLoading()"
+      nz-button
+      nzType="primary"
+      type="submit"
+      
+    >
+      Publier le cours
+    </button>
+  </div>
+</form>

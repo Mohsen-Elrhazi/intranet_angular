@@ -18,6 +18,8 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { ClassroomDetailsComponent } from '../../../admin/pages/classrooms/components/classroom-details/classroom-details.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { CourseFormComponent } from '../courses/components/course-form/course-form.component';
 
 @Component({
   selector: 'app-classrooms',
@@ -47,6 +49,8 @@ export class ClassroomsComponent {
   private classroomService = inject(ClassroomService);
 
       private drawerService = inject(NzDrawerService);
+         private modalService = inject(NzModalService);
+  private messageService = inject(NzMessageService);
 
 
   classrooms = signal<ClassroomResponse[]>([]);
@@ -76,5 +80,18 @@ export class ClassroomsComponent {
             nzData: { classroom : classroom },
           });
     }
+
+  
+
+  addCourse(classroomId: number) {
+    this.modalService.create({
+       nzTitle: 'Ajouter un programme',
+           nzContent: CourseFormComponent,
+           nzFooter: null,
+           nzBodyStyle: { padding: '0' },
+            nzData: { classroomId: classroomId },
+         });
+  }
+
 
 }

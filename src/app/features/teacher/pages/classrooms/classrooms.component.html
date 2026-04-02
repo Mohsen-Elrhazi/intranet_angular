@@ -9,7 +9,7 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     @for (classroom of classrooms(); track classroom.id) {
       <nz-ribbon [nzText]="classroom.level" nzColor="green">
-        <nz-card [nzActions]="[actionEdit, actionDelete, actionInfos]" [nzHoverable]="true">
+        <nz-card [nzActions]="[actionEdit, actionInfos]" [nzHoverable]="true">
           <nz-card-meta [nzTitle]="titleTemplate" [nzDescription]="descriptionTemplate" />
         </nz-card>
       </nz-ribbon>
@@ -69,15 +69,17 @@
       </ng-template>
 
       <ng-template #actionEdit >
-        <button  class="cursor-pointer" nz-tooltip nzTooltipTitle="Modifier matière">
-          <nz-icon nzType="edit" />
+        <button  
+        (click)="addCourse(classroom.id)"
+        class="cursor-pointer" nz-tooltip nzTooltipTitle="Ajouter cours">
+          <nz-icon nzType="plus-circle" />
         </button>
       </ng-template>
-      <ng-template #actionDelete >
+      <!-- <ng-template #actionDelete >
         <button class="cursor-pointer" nz-tooltip nzTooltipTitle="Supprimer matière" nzDizable>
           <nz-icon nzType="delete" />
         </button>
-      </ng-template>
+      </ng-template> -->
       <ng-template #actionInfos>
         <button
           (click)="viewDetails(classroom)"
