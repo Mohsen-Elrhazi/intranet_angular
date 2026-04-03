@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CourseService } from '../services/course.service';
 import { CourseResponse } from './models/course-response.model';
+import { DatePipe } from '@angular/common';
 
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -17,6 +18,7 @@ import { NzTooltipDirective, NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-courses',
@@ -37,12 +39,14 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzSpinModule,
     NzTooltipDirective,
     NzBadgeModule,
+    DatePipe,
   ],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.css',
 })
 export class CoursesComponent {
   private courseService = inject(CourseService);
+  private router = inject(Router);
 
   courses = signal<CourseResponse[]>([]);
 
@@ -63,7 +67,9 @@ export class CoursesComponent {
   }
 
   viewDetails(course: CourseResponse) {
-    // Logique pour afficher les détails du cours
-    console.log('Détails du cours :', course);
+    // console.log('Détails du cours :', course);
+    this.router.navigate(['/teacher/courses', course.id], {
+      state: { data: course },
+    });
   }
 }

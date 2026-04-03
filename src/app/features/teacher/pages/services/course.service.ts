@@ -20,5 +20,9 @@ export class CourseService {
     getMyCourses(): Observable<ApiResponse<CourseResponse[]>> {
         return this.http.get<ApiResponse<CourseResponse[]>>(`${this.baseUrl}/my-courses`);
     }
+
+    getCourseById(courseId: number): Observable<ApiResponse<CourseResponse>> {
+        return this.http.get<ApiResponse<CourseResponse>>(`${this.baseUrl}/${courseId}`);
+    }
   
 }

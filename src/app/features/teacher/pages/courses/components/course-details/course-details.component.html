@@ -1,0 +1,92 @@
+<nz-layout>
+  <nz-content>
+    <div class="">
+      @if (course(); as course) {
+        <nz-page-header
+          class="bg-white border border-[#ebedf0] mb-6 rounded px-6 py-4"
+          (nzBack)="onBack()"
+          nzBackIcon
+          [nzTitle]="course.title"
+        >
+          <nz-page-header-content>
+            <nz-descriptions nzSize="small" [nzColumn]="4">
+              <nz-descriptions-item nzTitle="Créé par" [nzSpan]="1">
+                {{ course.teacher.firstName }} {{ course.teacher.lastName }}
+              </nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Classe" [nzSpan]="1">{{
+                course.classroom.name
+              }}</nz-descriptions-item>
+              <nz-descriptions-item nzTitle="Date de création" [nzSpan]="1">{{
+                course.createdAt | date: 'dd/MM/yyyy'
+              }}</nz-descriptions-item>
+            </nz-descriptions>
+          </nz-page-header-content>
+        </nz-page-header>
+
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="16" [nzXs]="24" [nzLg]="16">
+           
+            <nz-collapse>
+              <nz-collapse-panel nzHeader="Description" nzActive>
+                <p style="margin: 0">
+                  {{ course.description || 'Aucune description disponible pour ce support.' }}
+                </p>
+              </nz-collapse-panel>
+
+              <nz-collapse-panel nzHeader="Fichier joint">
+                @if (safeFileUrl()) {
+                  <iframe
+                    [src]="safeFileUrl()"
+                    class="w-full h-[800px] border-none"
+                    title="Prévisualisation du cours"
+                  >
+                    <p>Votre navigateur ne prend pas en charge les iframes.</p>
+                  </iframe>
+                } @else {
+                  <nz-alert
+                    nzType="warning"
+                    nzMessage="Impossible de charger l'aperçu du fichier."
+                  ></nz-alert>
+                }
+              </nz-collapse-panel>
+            </nz-collapse>
+
+          </div>
+
+          <div nz-col [nzSpan]="8" [nzXs]="24" [nzLg]="8">
+            <nz-card
+              nzTitle="Informations Complémentaires"
+              [nzBordered]="false"
+              class="shadow-sm rounded-md"
+            >
+              <nz-timeline>
+                <nz-timeline-item nzColor="blue"
+                  >Département : {{ course.classroom.program.department.name }}</nz-timeline-item
+                >
+                <nz-timeline-item nzColor="blue"
+                  >Filière : {{ course.classroom.program.name }}</nz-timeline-item
+                >
+                <nz-timeline-item nzColor="blue"
+                  >Niveau : {{ course.classroom.level }}</nz-timeline-item
+                >
+                <nz-timeline-item nzColor="blue"
+                  >Promotion : {{ course.classroom.promotion }}</nz-timeline-item
+                >
+              </nz-timeline>
+
+              <nz-divider class="my-4"></nz-divider>
+
+              <nz-statistic
+                [nzValue]="course.classroom.students.length"
+                [nzTitle]="'Étudiants concernés'"
+                [nzPrefix]="prefixTpl"
+              ></nz-statistic>
+
+              <ng-template #prefixTpl><span nz-icon nzType="team" class="mr-2"></span></ng-template>
+            </nz-card>
+          </div>
+        </div>
+      }
+    </div>
+  </nz-content>
+</nz-layout>

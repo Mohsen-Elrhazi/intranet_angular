@@ -36,6 +36,14 @@
             </nz-tag>
           </div>
 
+             <div class="flex justify-between items-center gap-4 w-full">
+            <span class="text-gray-500 text-sm whitespace-nowrap">Date :</span>
+
+            <nz-tag nzColor="blue" class="max-w-[200px] truncate m-0" [title]="course.classroom.name">
+              {{ course.createdAt | date:'dd/MM/yyyy' }}
+            </nz-tag>
+          </div>
+
         </div>
       </ng-template>
 
