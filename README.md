@@ -1,59 +1,63 @@
-# IntranetAngular
+# 🎓 Intranet Universitaire — Interface Web (Frontend)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.5.
+![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![NG-ZORRO](https://img.shields.io/badge/NG--ZORRO-1890FF?style=for-the-badge&logo=antdesign&logoColor=white)
 
-## Development server
+## 📋 À propos du projet
 
-To start a local development server, run:
+Application frontend **Angular** de la plateforme **Intranet Universitaire**. Elle consomme l'API REST **Spring Boot** dédiée pour assurer la gestion académique et administrative de l'établissement avec une authentification sécurisée et un contrôle d'accès basé sur les rôles (**Admin**, **Enseignant**, **Étudiant**).
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ✨ Fonctionnalités principales
 
-## Code scaffolding
+### 🔐 Authentification & Sécurité
+* Connexion utilisateur avec gestion complète des **JWT** (*Access Token* & *Refresh Token*).
+* Décodage automatique du token pour l'extraction des rôles et permissions.
+* Navigation dynamique et affichage conditionnel des menus selon le rôle connecté (`ADMIN`, `TEACHER`, `STUDENT`).
+* Protection des routes par **Auth Guards** et **Role Guards**.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 🛠️ Espace Administrateur (`Admin`)
+* **Gestion des utilisateurs :** CRUD complet des étudiants et des enseignants (listes actifs et archivés/supprimés).
+* **Gestion académique :** Administration des départements, filières/programmes et matières.
+* **Gestion des infrastructures :** Attribution et suivi des salles de classe.
 
-```bash
-ng generate component component-name
-```
+### 👨‍🏫 Espace Enseignant (`Teacher`)
+* Consultation et gestion des cours assignés.
+* Visualisation des salles de classe attribuées et du planning associé.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 🎓 Espace Étudiant (`Student`)
+* Consultation des cours inscrits et des matières du programme.
+* Accès aux affectations (*assignments*) et aux informations des salles de classe.
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🏗️ Architecture & Aspects techniques
 
-To build the project run:
+* **Architecture modulaire par domaine (*Feature-based*) :** Découpage clair en modules autonomes (`auth`, `admin`, `teacher`, `student`, `core`, `layout`, `shared`).
+* **Intercepteurs HTTP (`HttpInterceptor`) :** Injection automatique du Bearer Token JWT dans les en-têtes des requêtes sortantes et gestion centralisée des erreurs API.
+* **Composants UI réutilisables :** Factorisation des tableaux de données (actifs/supprimés), modales de détails et formulaires réactifs.
+* **Design System hybride :** Combinaison des composants riches **NG-ZORRO (Ant Design)** et des classes utilitaires **Tailwind CSS 4**.
+* **Gestion multi-environnements :** Configuration séparée pour les environnements de développement (`environment.development.ts`) et de production (`environment.ts`).
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 📂 Structure du projet
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```text
+src/
+├── app/
+│   ├── core/               # Services singleton, Guards, Intercepteurs HTTP, Modèles
+│   ├── layout/             # Structure principale (Sidebar, Header, Navigation par rôle)
+│   ├── features/
+│   │   ├── auth/           # Pages de connexion et gestion de session
+│   │   ├── admin/          # Gestion étudiants, enseignants, départements, cours, salles
+│   │   ├── teacher/        # Vue et gestion des cours/salles côté enseignant
+│   │   └── student/        # Vue des cours, affectations et salles côté étudiant
+│   ├── shared/             # Composants réutilisables, pipes et directives
+│   ├── app.routes.ts       # Configuration du routage principal et lazy-loading
+│   └── app.config.ts       # Providers globaux (HttpClient, NG-ZORRO, Animations)
+├── environments/           # Variables d'environnement (dev / prod)
+└── styles.css              # Configuration Tailwind CSS 4 et thèmes globaux
